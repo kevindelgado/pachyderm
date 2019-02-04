@@ -263,16 +263,22 @@ func List(rs []io.ReadCloser, pattern string, f func(string, *NodeProto) error) 
 }
 
 func glob(tx *bolt.Tx, pattern string, f func(string, *NodeProto) error) error {
+	fmt.Println("inside little glob")
 	if !IsGlob(pattern) {
 		node, err := get(tx, pattern)
-		if err != nil {
+		if err != nil {//&& Code(err) != PathNotFound {
+			// This breaks here
+			fmt.Println("GE1", err)
 			return err
 		}
+		s := externalDefault(pattern)
+		fmt.Println("GE2 ", s)
 		return f(externalDefault(pattern), node)
 	}
 
 	g, err := globlib.Compile(pattern, '/')
 	if err != nil {
+		fmt.Println("GE3")
 		return errorf(MalformedGlob, err.Error())
 	}
 	c := fs(tx).Cursor()
@@ -280,16 +286,20 @@ func glob(tx *bolt.Tx, pattern string, f func(string, *NodeProto) error) error {
 		if g.Match(s(k)) {
 			node := &NodeProto{}
 			if node.Unmarshal(v); err != nil {
+				fmt.Println("GE4")
 				return err
 			}
 			if err := f(externalDefault(s(k)), node); err != nil {
 				if err == errutil.ErrBreak {
+					fmt.Println("NGE1")
 					return nil
 				}
+				fmt.Println("GE5")
 				return err
 			}
 		}
 	}
+	fmt.Println("NGE2")
 	return nil
 }
 

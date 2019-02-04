@@ -10,7 +10,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"regexp"
 	"sort"
 	"strings"
 	"sync"
@@ -392,7 +391,6 @@ func TestRegressionPutFileIntoOpenCommit(t *testing.T) {
 	err = client.Close()
 	require.NoError(t, err)
 }
-
 
 func TestCreateInvalidBranchName(t *testing.T) {
 
@@ -2954,6 +2952,7 @@ func TestDiff(t *testing.T) {
 }
 
 func TestGlob(t *testing.T) {
+	fmt.Println("inside TestGlob")
 	if testing.Short() {
 		t.Skip("Skipping integration tests in short mode")
 	}
@@ -2963,7 +2962,7 @@ func TestGlob(t *testing.T) {
 	require.NoError(t, c.CreateRepo(repo))
 
 	// Write foo
-	numFiles := 100
+	numFiles := 10
 	_, err := c.StartCommit(repo, "master")
 	require.NoError(t, err)
 	for i := 0; i < numFiles; i++ {
@@ -2984,104 +2983,118 @@ func TestGlob(t *testing.T) {
 	fileInfos, err = c.GlobFile(repo, "master", "dir1/*")
 	require.NoError(t, err)
 	require.Equal(t, numFiles, len(fileInfos))
-	fileInfos, err = c.GlobFile(repo, "master", "dir2/dir3/*")
-	require.NoError(t, err)
-	require.Equal(t, numFiles, len(fileInfos))
-	fileInfos, err = c.GlobFile(repo, "master", "*/*")
-	require.NoError(t, err)
-	require.Equal(t, numFiles+1, len(fileInfos))
 
-	require.NoError(t, c.FinishCommit(repo, "master"))
-
-	fileInfos, err = c.GlobFile(repo, "master", "*")
-	require.NoError(t, err)
-	require.Equal(t, numFiles+2, len(fileInfos))
-	fileInfos, err = c.GlobFile(repo, "master", "file*")
-	require.NoError(t, err)
-	require.Equal(t, numFiles, len(fileInfos))
-	fileInfos, err = c.GlobFile(repo, "master", "dir1/*")
-	require.NoError(t, err)
-	require.Equal(t, numFiles, len(fileInfos))
-	fileInfos, err = c.GlobFile(repo, "master", "dir2/dir3/*")
-	require.NoError(t, err)
-	require.Equal(t, numFiles, len(fileInfos))
-	fileInfos, err = c.GlobFile(repo, "master", "*/*")
-	require.NoError(t, err)
-	require.Equal(t, numFiles+1, len(fileInfos))
-
-	// Test file glob
-	fileInfos, err = c.ListFile(repo, "master", "*")
-	require.NoError(t, err)
-	require.Equal(t, numFiles*2+1, len(fileInfos))
-
-	fileInfos, err = c.ListFile(repo, "master", "dir2/dir3/file1?")
-	require.NoError(t, err)
-	require.Equal(t, 10, len(fileInfos))
-
-	fileInfos, err = c.ListFile(repo, "master", "dir?/*")
-	require.NoError(t, err)
-	require.Equal(t, numFiles*2, len(fileInfos))
-
-	var output strings.Builder
-	err = c.GetFile(repo, "master", "*", 0, 0, &output)
-	require.Equal(t, numFiles, len(output.String()))
-
-	output = strings.Builder{}
-	err = c.GetFile(repo, "master", "dir2/dir3/file1?", 0, 0, &output)
-	require.Equal(t, 10, len(output.String()))
-
-	output = strings.Builder{}
-	err = c.GetFile(repo, "master", "**file1?", 0, 0, &output)
-	require.Equal(t, 30, len(output.String()))
-
-	output = strings.Builder{}
-	err = c.GetFile(repo, "master", "**file1", 0, 0, &output)
-	require.True(t, strings.Contains(output.String(), "1"))
-	require.True(t, strings.Contains(output.String(), "2"))
-	require.True(t, strings.Contains(output.String(), "3"))
-
-	output = strings.Builder{}
-	err = c.GetFile(repo, "master", "**file1", 1, 1, &output)
-	match, err := regexp.Match("[123]", []byte(output.String()))
-	require.NoError(t, err)
-	require.True(t, match)
-
-	output = strings.Builder{}
-	err = c.GetFile(repo, "master", "dir?", 0, 0, &output)
-	require.NoError(t, err)
-
-	output = strings.Builder{}
-	err = c.GetFile(repo, "master", "", 0, 0, &output)
-	require.NoError(t, err)
-
-	output = strings.Builder{}
-	err = c.GetFile(repo, "master", "garbage", 0, 0, &output)
-	require.YesError(t, err)
-
-	_, err = c.StartCommit(repo, "master")
-	require.NoError(t, err)
-
-	err = c.DeleteFile(repo, "master", "dir2/dir3/*")
-	require.NoError(t, err)
-	fileInfos, err = c.GlobFile(repo, "master", "**")
-	require.NoError(t, err)
-	require.Equal(t, numFiles*2+3, len(fileInfos))
-	err = c.DeleteFile(repo, "master", "dir?/*")
-	require.NoError(t, err)
-	fileInfos, err = c.GlobFile(repo, "master", "**")
-	require.NoError(t, err)
-	require.Equal(t, numFiles+2, len(fileInfos))
-	err = c.DeleteFile(repo, "master", "/")
-	require.NoError(t, err)
-	fileInfos, err = c.GlobFile(repo, "master", "**")
+	// Testing for #3068
+	fmt.Println("custom tests")
+	fileInfos, err = c.GlobFile(repo, "master", "bad*")
 	require.NoError(t, err)
 	require.Equal(t, 0, len(fileInfos))
-
-	require.NoError(t, c.FinishCommit(repo, "master"))
-
-	fileInfos, err = c.GlobFile(repo, "master", "**")
+	fileInfos, err = c.GlobFile(repo, "master", "/bad*")
 	require.NoError(t, err)
 	require.Equal(t, 0, len(fileInfos))
+	fileInfos, err = c.GlobFile(repo, "master", "bad/")
+	require.NoError(t, err)
+	fmt.Println("end custom tests")
+	//
+
+	// fileInfos, err = c.GlobFile(repo, "master", "dir2/dir3/*")
+	// require.NoError(t, err)
+	// require.Equal(t, numFiles, len(fileInfos))
+	// fileInfos, err = c.GlobFile(repo, "master", "*/*")
+	// require.NoError(t, err)
+	// require.Equal(t, numFiles+1, len(fileInfos))
+
+	// require.NoError(t, c.FinishCommit(repo, "master"))
+
+	// fileInfos, err = c.GlobFile(repo, "master", "*")
+	// require.NoError(t, err)
+	// require.Equal(t, numFiles+2, len(fileInfos))
+	// fileInfos, err = c.GlobFile(repo, "master", "file*")
+	// require.NoError(t, err)
+	// require.Equal(t, numFiles, len(fileInfos))
+	// fileInfos, err = c.GlobFile(repo, "master", "dir1/*")
+	// require.NoError(t, err)
+	// require.Equal(t, numFiles, len(fileInfos))
+	// fileInfos, err = c.GlobFile(repo, "master", "dir2/dir3/*")
+	// require.NoError(t, err)
+	// require.Equal(t, numFiles, len(fileInfos))
+	// fileInfos, err = c.GlobFile(repo, "master", "*/*")
+	// require.NoError(t, err)
+	// require.Equal(t, numFiles+1, len(fileInfos))
+
+	// // Test file glob
+	// fileInfos, err = c.ListFile(repo, "master", "*")
+	// require.NoError(t, err)
+	// require.Equal(t, numFiles*2+1, len(fileInfos))
+
+	// fileInfos, err = c.ListFile(repo, "master", "dir2/dir3/file1?")
+	// require.NoError(t, err)
+	// require.Equal(t, 10, len(fileInfos))
+
+	// fileInfos, err = c.ListFile(repo, "master", "dir?/*")
+	// require.NoError(t, err)
+	// require.Equal(t, numFiles*2, len(fileInfos))
+
+	// var output strings.Builder
+	// err = c.GetFile(repo, "master", "*", 0, 0, &output)
+	// require.Equal(t, numFiles, len(output.String()))
+
+	// output = strings.Builder{}
+	// err = c.GetFile(repo, "master", "dir2/dir3/file1?", 0, 0, &output)
+	// require.Equal(t, 10, len(output.String()))
+
+	// output = strings.Builder{}
+	// err = c.GetFile(repo, "master", "**file1?", 0, 0, &output)
+	// require.Equal(t, 30, len(output.String()))
+
+	// output = strings.Builder{}
+	// err = c.GetFile(repo, "master", "**file1", 0, 0, &output)
+	// require.True(t, strings.Contains(output.String(), "1"))
+	// require.True(t, strings.Contains(output.String(), "2"))
+	// require.True(t, strings.Contains(output.String(), "3"))
+
+	// output = strings.Builder{}
+	// err = c.GetFile(repo, "master", "**file1", 1, 1, &output)
+	// match, err := regexp.Match("[123]", []byte(output.String()))
+	// require.NoError(t, err)
+	// require.True(t, match)
+
+	// output = strings.Builder{}
+	// err = c.GetFile(repo, "master", "dir?", 0, 0, &output)
+	// require.NoError(t, err)
+
+	// output = strings.Builder{}
+	// err = c.GetFile(repo, "master", "", 0, 0, &output)
+	// require.NoError(t, err)
+
+	// output = strings.Builder{}
+	// err = c.GetFile(repo, "master", "garbage", 0, 0, &output)
+	// require.YesError(t, err)
+
+	// _, err = c.StartCommit(repo, "master")
+	// require.NoError(t, err)
+
+	// err = c.DeleteFile(repo, "master", "dir2/dir3/*")
+	// require.NoError(t, err)
+	// fileInfos, err = c.GlobFile(repo, "master", "**")
+	// require.NoError(t, err)
+	// require.Equal(t, numFiles*2+3, len(fileInfos))
+	// err = c.DeleteFile(repo, "master", "dir?/*")
+	// require.NoError(t, err)
+	// fileInfos, err = c.GlobFile(repo, "master", "**")
+	// require.NoError(t, err)
+	// require.Equal(t, numFiles+2, len(fileInfos))
+	// err = c.DeleteFile(repo, "master", "/")
+	// require.NoError(t, err)
+	// fileInfos, err = c.GlobFile(repo, "master", "**")
+	// require.NoError(t, err)
+	// require.Equal(t, 0, len(fileInfos))
+
+	// require.NoError(t, c.FinishCommit(repo, "master"))
+
+	// fileInfos, err = c.GlobFile(repo, "master", "**")
+	// require.NoError(t, err)
+	// require.Equal(t, 0, len(fileInfos))
 }
 
 // TestGetFileGlobOrder checks that GetFile(glob) streams data back in the
@@ -4742,4 +4755,3 @@ func TestFileHistory(t *testing.T) {
 		require.Equal(t, i, len(fileInfos))
 	}
 }
-
