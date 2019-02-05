@@ -3320,7 +3320,7 @@ func (d *driver) forEachPutFile(pachClient *client.APIClient, server pfs.API_Put
 					branch = commit.ID
 				}
 				// inspect the commit where we're adding files and figure out
-				// if this is a one-off put-file.
+				// if this is a one-off put-file. 
 				// - if 'commit' refers to an open commit                -> not oneOff
 				// - otherwise (i.e. branch with closed HEAD or no HEAD) -> yes oneOff
 				// Note that if commit is a specific commit ID, it must be
