@@ -393,6 +393,7 @@ func TestRegressionPutFileIntoOpenCommit(t *testing.T) {
 	require.NoError(t, err)
 }
 
+
 func TestCreateInvalidBranchName(t *testing.T) {
 
 	client := GetPachClient(t)
@@ -2953,7 +2954,6 @@ func TestDiff(t *testing.T) {
 }
 
 func TestGlob(t *testing.T) {
-	fmt.Println("inside TestGlob")
 	if testing.Short() {
 		t.Skip("Skipping integration tests in short mode")
 	}
