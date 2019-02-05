@@ -266,19 +266,23 @@ func glob(tx *bolt.Tx, pattern string, f func(string, *NodeProto) error) error {
 	fmt.Println("inside little glob")
 	if !IsGlob(pattern) {
 		node, err := get(tx, pattern)
+		if Code(err) == PathNotFound {
+			// glob pattern is for a static file that doesn't exist, no match
+			return nil
+		}
 		if err != nil {//&& Code(err) != PathNotFound {
 			// This breaks here
-			fmt.Println("GE1", err)
+			//fmt.Println("GE1", err)
 			return err
 		}
-		s := externalDefault(pattern)
-		fmt.Println("GE2 ", s)
+		//s := externalDefault(pattern)
+		//fmt.Println("GE2 ", s)
 		return f(externalDefault(pattern), node)
 	}
 
 	g, err := globlib.Compile(pattern, '/')
 	if err != nil {
-		fmt.Println("GE3")
+		//fmt.Println("GE3")
 		return errorf(MalformedGlob, err.Error())
 	}
 	c := fs(tx).Cursor()
@@ -286,20 +290,20 @@ func glob(tx *bolt.Tx, pattern string, f func(string, *NodeProto) error) error {
 		if g.Match(s(k)) {
 			node := &NodeProto{}
 			if node.Unmarshal(v); err != nil {
-				fmt.Println("GE4")
+				//fmt.Println("GE4")
 				return err
 			}
 			if err := f(externalDefault(s(k)), node); err != nil {
 				if err == errutil.ErrBreak {
-					fmt.Println("NGE1")
+					//fmt.Println("NGE1")
 					return nil
 				}
-				fmt.Println("GE5")
+				//fmt.Println("GE5")
 				return err
 			}
 		}
 	}
-	fmt.Println("NGE2")
+	//fmt.Println("NGE2")
 	return nil
 }
 

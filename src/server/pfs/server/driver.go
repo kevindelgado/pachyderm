@@ -2818,47 +2818,47 @@ func (d *driver) walkFile(pachClient *client.APIClient, file *pfs.File, f func(*
 }
 
 func (d *driver) globFile(pachClient *client.APIClient, commit *pfs.Commit, pattern string, f func(*pfs.FileInfo) error) (retErr error) {
-	fmt.Println("driver globFile called")
+	//fmt.Println("driver globFile called")
 	if err := d.checkIsAuthorized(pachClient, commit.Repo, auth.Scope_READER); err != nil {
-		fmt.Println("e1")
+		//fmt.Println("e1")
 		return err
 	}
 	commitInfo, err := d.inspectCommit(pachClient, commit, pfs.CommitState_STARTED)
 	if err != nil {
-		fmt.Println("e2")
+		//fmt.Println("e2")
 		return err
 	}
 	// Handle commits to input repos
-	fmt.Println("Handle commits to input repos")
+	//fmt.Println("Handle commits to input repos")
 	if commitInfo.Provenance == nil {
-		fmt.Println("Inside commit prov")
+		//fmt.Println("Inside commit prov")
 		tree, err := d.getTreeForFile(pachClient, client.NewFile(commit.Repo.Name, commit.ID, ""))
-		fmt.Println("Outside getTree")
+		//fmt.Println("Outside getTree")
 		if err != nil {
-			fmt.Println("e3")
+			//fmt.Println("e3")
 			return err
 		}
 		e := tree.Glob(pattern, func(path string, node *hashtree.NodeProto) error {
-			fmt.Println("inside tree glob")
+			//fmt.Println("inside tree glob")
 			fi, err := nodeToFileInfoHeaderFooter(commitInfo, path, node, tree, false)
 			if err != nil {
-				fmt.Println("e4")
+				//fmt.Println("e4")
 				return err
 			}
-			fmt.Println("e?")
+			//fmt.Println("e?")
 			return f(fi)
 		})
-		fmt.Println("outside tree glob ", e)
+		//fmt.Println("outside tree glob ", e)
 		return e
 	}
 	// Handle commits to output repos
-	fmt.Println("Handle commits to output repos")
+	//fmt.Println("Handle commits to output repos")
 	if commitInfo.Finished == nil {
-		fmt.Println("e5")
+		//fmt.Println("e5")
 		return fmt.Errorf("output commit %v not finished", commitInfo.Commit.ID)
 	}
 	if commitInfo.Trees == nil {
-		fmt.Println("e none")
+		//fmt.Println("e none")
 		return nil
 	}
 	var rs []io.ReadCloser
@@ -2869,19 +2869,19 @@ func (d *driver) globFile(pachClient *client.APIClient, commit *pfs.Commit, patt
 		rs, err = d.getTrees(pachClient, commitInfo, pattern)
 	}
 	if err != nil {
-		fmt.Println("e6")
+		//fmt.Println("e6")
 		return err
 	}
 	defer func() {
 		for _, r := range rs {
 			if err := r.Close(); err != nil && retErr != nil {
-				fmt.Println("e last")
+				//fmt.Println("e last")
 				retErr = err
 			}
 		}
 	}()
 	return hashtree.Glob(rs, pattern, func(rootPath string, rootNode *hashtree.NodeProto) error {
-		fmt.Println("e7")
+		//fmt.Println("e7")
 		return f(nodeToFileInfo(commitInfo, rootPath, rootNode, false))
 	})
 }
