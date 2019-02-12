@@ -2473,6 +2473,7 @@ func (d *driver) getFile(pachClient *client.APIClient, file *pfs.File, offset in
 			ctx,
 			&pfs.GetObjectsRequest{
 				//TODO(kdelga) pass File as a param in the object request
+				File: file,
 				Objects:     objects,
 				OffsetBytes: uint64(offset),
 				SizeBytes:   uint64(size),
@@ -2483,7 +2484,8 @@ func (d *driver) getFile(pachClient *client.APIClient, file *pfs.File, offset in
 		}
 		fmt.Println("doing it via objects")
 		// TODO(kdelga) this will need to return a streaming gfr reader
-		return grpcutil.NewStreamingBytesReader(getObjectsClient, nil), nil
+		// return grpcutil.NewStreamingBytesReader(getObjectsClient, nil), nil
+		return pfs.NewStreamingGFRReader(getObjectsClient, nil), nil
 	}
 	// Handle commits to output repos
 	if commitInfo.Finished == nil {

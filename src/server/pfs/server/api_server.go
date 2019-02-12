@@ -273,15 +273,25 @@ type getFileStreamServer struct {
 	s pfs.API_GetFileStreamServer
 }
 
-func (s getFileStreamServer) Send(bytesValue *types.BytesValue) error {
-	gfr := &pfs.GetFileResponse{
-		//TODO(kdelga): I guess here is where we want to do our metadata stuff
-		// maybe this should be added to driver?
-		File: nil,
-		Value: bytesValue.Value,
-	}
-	return s.s.Send(gfr)
-}
+// func (s getFileStreamServer) Send(bytesValue *types.BytesValue) error {
+// 	gfr := &pfs.GetFileResponse{
+// 		//TODO(kdelga): I guess here is where we want to do our metadata stuff
+// 		// maybe this should be added to driver?
+// 		File: nil,
+// 		Value: bytesValue.Value,
+// 	}
+// 	return s.s.Send(gfr)
+// }
+
+// func (s getFileStreamServer) Send(gfr *pfs.GetFileResponse) error {
+// 	// gfr := &pfs.GetFileResponse{
+// 	// 	//TODO(kdelga): I guess here is where we want to do our metadata stuff
+// 	// 	// maybe this should be added to driver?
+// 	// 	File: nil,
+// 	// 	Value: bytesValue.Value,
+// 	// }
+// 	return s.s.Send(gfr)
+// }
 
 func (a *apiServer) GetFileStream(request *pfs.GetFileRequest, apiGetFileStreamServer pfs.API_GetFileStreamServer) (retErr error) {
 	func() { a.Log(request, nil, nil, 0) }()
@@ -292,12 +302,13 @@ func (a *apiServer) GetFileStream(request *pfs.GetFileRequest, apiGetFileStreamS
 		return err
 	}
 
-	gfss := &getFileStreamServer{
-		s: apiGetFileStreamServer,
-	}
+	// gfss := &getFileStreamServer{
+	// 	s: apiGetFileStreamServer,
+	// }
 
 	//TODO(kdelga): This will need to write to a streaming gfr server
-	return grpcutil.WriteToStreamingBytesServer(file, gfss)
+	return pfs.WriteToStreamingGFRServer(file, apiGetFileStreamServer)
+	//return grpcutil.WriteToStreamingBytesServer(file, gfss)
 }
 
 func (a *apiServer) GetFile(request *pfs.GetFileRequest, apiGetFileServer pfs.API_GetFileServer) (retErr error) {

@@ -433,9 +433,15 @@ func (s *objBlockAPIServer) GetObjects(request *pfsclient.GetObjectsRequest, get
 				return err
 			}
 			fmt.Println("objects plural if: ", i)
+			//TODO(kdelga): uncomment
 			if err := grpcutil.WriteToStreamingBytesServer(r, getObjectsServer); err != nil {
 				return err
 			}
+			//fmt.Println("Didn't think we'd get here")
+			//if err := pfsclient.WriteToStreamingGFRServer(r, getObjectsServer); err != nil {
+			//	return err
+			//}
+
 			if err := r.Close(); err != nil && retErr == nil {
 				retErr = err
 			}
@@ -450,16 +456,23 @@ func (s *objBlockAPIServer) GetObjects(request *pfsclient.GetObjectsRequest, get
 			}
 			fmt.Println("objects plural else: ", i)
 			//TODO(kdelga): generate GFR with non-nil file on first obj of the get, then write these files to a streaming gfr server.
-			// if i = 0 :
-			//resp := &pfsclient.GetFileResponse{
-			//	File: request.File,
-			//  Value:
-			//}
-
-			//if err := WriteToStreamingGFRServer()
-			if err := grpcutil.WriteToStreamingBytesServer(bytes.NewReader(data[offset:offset+readSize]), getObjectsServer); err != nil {
+			var resp = &pfsclient.GetFileResponse{
+				Value: data[offset : offset+readSize],
+			}
+			if i == 0 {
+				resp.File = request.File
+			}
+			b, err := proto.Marshal(resp)
+			if err != nil {
 				return err
 			}
+			if err := pfsclient.WriteToStreamingGFRServer(bytes.NewReader(b), getObjectsServer); err != nil {
+				return err
+			}
+
+			// if err := grpcutil.WriteToStreamingBytesServer(bytes.NewReader(data[offset:offset+readSize]), getObjectsServer); err != nil {
+			// 	return err
+			// }
 		}
 		// We've hit the offset so we set it to 0
 		offset = 0

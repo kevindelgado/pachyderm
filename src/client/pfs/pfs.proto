@@ -592,7 +592,7 @@ service ObjectAPI {
   rpc PutObjectSplit(stream PutObjectRequest) returns (Objects) {}
   rpc PutObjects(stream PutObjectRequest) returns (google.protobuf.Empty) {}
   rpc GetObject(Object) returns (stream google.protobuf.BytesValue) {}
-  rpc GetObjects(GetObjectsRequest) returns (stream google.protobuf.BytesValue) {}
+  rpc GetObjects(GetObjectsRequest) returns (stream GetFileResponse) {}
   rpc GetBlocks(GetBlocksRequest) returns (stream google.protobuf.BytesValue) {}
   rpc TagObject(TagObjectRequest) returns (google.protobuf.Empty) {}
   rpc InspectObject(Object) returns (ObjectInfo) {}

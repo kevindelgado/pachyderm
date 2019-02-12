@@ -631,7 +631,10 @@ func (c APIClient) GetObjects(hashes []string, offset uint64, size uint64, total
 	if err != nil {
 		return grpcutil.ScrubGRPC(err)
 	}
-	if err := grpcutil.WriteFromStreamingBytesClient(getObjectsClient, writer); err != nil {
+	//if err := grpcutil.WriteFromStreamingBytesClient(getObjectsClient, writer); err != nil {
+	//	return grpcutil.ScrubGRPC(err)
+	//}
+	if err := pfs.WriteFromStreamingGFRClient(getObjectsClient, writer); err != nil {
 		return grpcutil.ScrubGRPC(err)
 	}
 	return nil
@@ -772,8 +775,8 @@ type GetFileClient interface {
 }
 
 type getFileClient struct {
-	c pfs.API_GetFileStreamClient
-	mu sync.Mutex
+	c      pfs.API_GetFileStreamClient
+	mu     sync.Mutex
 	oneoff bool
 }
 
@@ -788,17 +791,19 @@ func (c APIClient) newOneoffGetFileClient(repoName string, commitID string, path
 
 //TODO(kdelga): It smells bad to pass the receiver as an arg (see other interface funcs too)
 func (c getFileClient) GetFile(repoName, commitID, path string, offset, size int64, writer io.Writer) error {
-	if err := grpcutil.WriteFromStreamingBytesClient(c, writer); err != nil {
+	//if err := grpcutil.WriteFromStreamingBytesClient(c, writer); err != nil {
+	if err := pfs.WriteFromStreamingGFRClient(c, writer); err != nil {
 		return grpcutil.ScrubGRPC(err)
 	}
 	return nil
 }
 
-func (c getFileClient) Recv() (*types.BytesValue, error) {
-	gfr, err := c.c.Recv()
-	return &types.BytesValue{
-		Value: gfr.Value,
-	}, err
+func (c getFileClient) Recv() (*pfs.GetFileResponse, error) {
+	return c.c.Recv()
+	// gfr, err := c.c.Recv()
+	// return &types.BytesValue{
+	// 	Value: gfr.Value,
+	// }, err
 }
 
 // PutFileClient is a client interface for putting files. There are 2
@@ -1068,7 +1073,7 @@ func (c APIClient) GetFileStream(repoName string, commitID string, path string, 
 	//	defer c.limiter.Release()
 	//}
 
-	gfc, err := c.newOneoffGetFileClient(repoName, commitID, path, offset, size)//, writer)
+	gfc, err := c.newOneoffGetFileClient(repoName, commitID, path, offset, size) //, writer)
 	if err != nil {
 		return err
 	}
