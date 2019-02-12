@@ -532,6 +532,7 @@ message GetObjectsRequest {
   // entirely accurate or if it's unknown (in which case it'd be set to 0).
   // It's used primarily as a hint for cache eviction.
   uint64 total_size = 4;
+  File file = 5;
 }
 
 message GetBlocksRequest {

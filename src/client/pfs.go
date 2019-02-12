@@ -1054,6 +1054,7 @@ func (c APIClient) GetFile(repoName string, commitID string, path string, offset
 	if err != nil {
 		return grpcutil.ScrubGRPC(err)
 	}
+	//TODO(kdelga): write from streaming GFR Client
 	if err := grpcutil.WriteFromStreamingBytesClient(apiGetFileClient, writer); err != nil {
 		return grpcutil.ScrubGRPC(err)
 	}
@@ -1084,6 +1085,7 @@ func (c APIClient) GetFileReader(repoName string, commitID string, path string, 
 	if err != nil {
 		return nil, grpcutil.ScrubGRPC(err)
 	}
+	// TODO(kdelga) return a new streaming gfr reader
 	return grpcutil.NewStreamingBytesReader(apiGetFileClient, nil), nil
 }
 
