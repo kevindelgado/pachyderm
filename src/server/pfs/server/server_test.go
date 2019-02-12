@@ -2033,6 +2033,7 @@ func TestGetFileStream(t *testing.T) {
 	for _, path := range paths {
 		gfr := &pfs.GetFileRequest{
 			File: pclient.NewFile("repo", "master", path),
+			//File: pclient.NewFile("repo", "master", "*"),
 			OffsetBytes: 0,
 			SizeBytes: 0,
 		}

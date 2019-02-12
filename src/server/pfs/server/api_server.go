@@ -294,7 +294,10 @@ func (a *apiServer) GetFileStream(request *pfs.GetFileRequest, apiGetFileStreamS
 		return err
 	}
 
-	gfrReader := a.driver.filesFromByteStream(a.getPachClient(apiGetFileStreamServer.Context()), file, request.File, request.OffsetBytes, request.SizeBytes)
+	gfrReader, err := a.driver.filesFromByteStream(a.getPachClient(apiGetFileStreamServer.Context()), file, request.File, request.OffsetBytes, request.SizeBytes)
+	if err != nil {
+		return err
+	}
 
 	gfss := &getFileStreamServer{
 		s: apiGetFileStreamServer,
