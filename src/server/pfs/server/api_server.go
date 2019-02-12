@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"github.com/gogo/protobuf/proto"
 	"sync"
 	"time"
 
@@ -274,12 +275,18 @@ type getFileStreamServer struct {
 }
 
 func (s getFileStreamServer) Send(bytesValue *types.BytesValue) error {
-	gfr := &pfs.GetFileResponse{
-		//TODO(kdelga): I guess here is where we want to do our metadata stuff
-		// maybe this should be added to driver?
-		File: nil,
-		Value: bytesValue.Value,
+	gfr := new(pfs.GetFileResponse)
+	err := proto.Unmarshal(bytesValue.Value, gfr)
+	if err != nil {
+		fmt.Println("send err: ", err.Error())
+		return err
 	}
+	//gfr := &pfs.GetFileResponse{
+	//	//TODO(kdelga): I guess here is where we want to do our metadata stuff
+	//	// maybe this should be added to driver?
+	//	File: nil,
+	//	Value: bytesValue.Value,
+	//}
 	return s.s.Send(gfr)
 }
 
