@@ -2538,6 +2538,213 @@ func (d *driver) getFile(pachClient *client.APIClient, file *pfs.File, offset in
 	return grpcutil.NewStreamingBytesReader(getBlocksClient, nil), nil
 }
 
+func (d *driver) getFiles(pachClient *client.APIClient, file *pfs.File, offset int64, size int64) (r io.Reader, retErr error) {
+	ctx := pachClient.Ctx()
+	if err := d.checkIsAuthorized(pachClient, file.Commit.Repo, auth.Scope_READER); err != nil {
+		return nil, err
+	}
+	commitInfo, err := d.inspectCommit(pachClient, file.Commit, pfs.CommitState_STARTED)
+	if err != nil {
+		return nil, err
+	}
+	// Handle commits to input repos
+	if commitInfo.Provenance == nil {
+		tree, err := d.getTreeForFile(pachClient, client.NewFile(file.Commit.Repo.Name, file.Commit.ID, ""))
+		if err != nil {
+			return nil, err
+		}
+		var (
+			pathsFound int
+			objects    []*pfs.Object
+			totalSize  uint64
+			footer     *pfs.Object
+			prevDir    string
+		)
+		if err := tree.Glob(file.Path, func(p string, node *hashtree.NodeProto) error {
+			pathsFound++
+			if node.FileNode == nil {
+				return nil
+			}
+
+			// add footer + header for next dir. If a user calls e.g.
+			// 'GetFile("/*/*")', then the output looks like:
+			// [d1 header][d1/1]...[d1/n][d1 footer] [d2 header]...[d2 footer] ...
+			parentPath := path.Dir(p)
+			if parentPath != prevDir {
+				if footer != nil {
+					objects = append(objects, footer)
+				}
+				footer = nil // don't apply footer twice if next dir has no footer
+				prevDir = parentPath
+				if node.FileNode.HasHeaderFooter {
+					// if any child of 'node's parent directory has HasHeaderFooter set,
+					// then they all should
+					parentNode, err := tree.Get(parentPath)
+					if err != nil {
+						return fmt.Errorf("file %q has a header, but could not "+
+							"retrieve parent node at %q to get header content: %v", p,
+							parentPath, err)
+					}
+					if parentNode.DirNode == nil {
+						return fmt.Errorf("parent of %q is not a directory—this is "+
+							"likely an internal error", p)
+					}
+					if parentNode.DirNode.Shared == nil {
+						return fmt.Errorf("file %q has a shared header or footer, "+
+							"but parent directory does not permit shared data", p)
+					}
+					if parentNode.DirNode.Shared.Header != nil {
+						objects = append(objects, parentNode.DirNode.Shared.Header)
+					}
+					if parentNode.DirNode.Shared.Footer != nil {
+						footer = parentNode.DirNode.Shared.Footer
+					}
+				}
+			}
+			objects = append(objects, node.FileNode.Objects...)
+			totalSize += uint64(node.SubtreeSize)
+			return nil
+		}); err != nil {
+			return nil, err
+		}
+		if footer != nil {
+			objects = append(objects, footer) // apply final footer
+		}
+		if pathsFound == 0 {
+			return nil, fmt.Errorf("no file(s) found that match %v", file.Path)
+		}
+
+		// retrieve the content of all objects in 'objects'
+		getObjectsClient, err := pachClient.ObjectAPIClient.GetObjects(
+			ctx,
+			&pfs.GetObjectsRequest{
+				Objects:     objects,
+				OffsetBytes: uint64(offset),
+				SizeBytes:   uint64(size),
+				TotalSize:   uint64(totalSize),
+			})
+		if err != nil {
+			return nil, err
+		}
+		objReader := grpcutil.NewStreamingBytesReader(getObjectsClient, nil)
+		fmt.Println("before reader")
+		gfrMsgReader := newGFRMsgReader(pachClient, objReader, file, offset, size)
+		fmt.Println("after reader")
+		return gfrMsgReader, nil
+		//return grpcutil.NewStreamingBytesReader(getObjectsClient, nil), nil
+	}
+	// Handle commits to output repos
+	if commitInfo.Finished == nil {
+		return nil, fmt.Errorf("output commit %v not finished", commitInfo.Commit.ID)
+	}
+	if commitInfo.Trees == nil {
+		return nil, fmt.Errorf("no file(s) found that match %v", file.Path)
+	}
+	var rs []io.ReadCloser
+	// Handles the case when looking for a specific file/directory
+	if !hashtree.IsGlob(file.Path) {
+		rs, err = d.getTree(pachClient, commitInfo, file.Path)
+	} else {
+		rs, err = d.getTrees(pachClient, commitInfo, file.Path)
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		for _, r := range rs {
+			if err := r.Close(); err != nil && retErr != nil {
+				retErr = err
+			}
+		}
+	}()
+	blockRefs := []*pfs.BlockRef{}
+	var totalSize int64
+	var found bool
+	if err := hashtree.Glob(rs, file.Path, func(path string, node *hashtree.NodeProto) error {
+		if node.FileNode == nil {
+			return nil
+		}
+		blockRefs = append(blockRefs, node.FileNode.BlockRefs...)
+		totalSize += node.SubtreeSize
+		found = true
+		return nil
+	}); err != nil {
+		return nil, err
+	}
+	if !found {
+		return nil, fmt.Errorf("no file(s) found that match %v", file.Path)
+	}
+	getBlocksClient, err := pachClient.ObjectAPIClient.GetBlocks(
+		ctx,
+		&pfs.GetBlocksRequest{
+			BlockRefs:   blockRefs,
+			OffsetBytes: uint64(offset),
+			SizeBytes:   uint64(size),
+			TotalSize:   uint64(totalSize),
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+	return grpcutil.NewStreamingBytesReader(getBlocksClient, nil), nil
+}
+
+// TODO(kdelga): what does size mean if it's 0?
+func newGFRMsgReader(pachClient *client.APIClient, objReader io.ReadCloser, file *pfs.File, offset, size int64) io.ReadCloser {
+	fmt.Println("start reader")
+	fmt.Println("file: ", file, " offset: ", offset, " size: ", size)
+	var buf bytes.Buffer
+	streamingGFRReader := &pfs.StreamingGFRReader{
+		Buffer: buf,
+		Cancel: nil,
+	}
+	var i int64
+	if size > int64(grpcutil.MaxMsgSize) {
+		for i = 0; i < size; i += int64(grpcutil.MaxMsgSize) {
+			_, e := io.CopyN(&buf, objReader, int64(grpcutil.MaxMsgSize))
+			if e != io.EOF {
+				fmt.Println(e.Error())
+			}
+			gfr := &pfs.GetFileResponse{
+				Value: buf.Bytes(),
+			}
+			if i == 0 {
+				gfr.File = file
+			}
+			fmt.Println("i: ", i, " gfr: ", gfr)
+
+			buf.Reset()
+		}
+	} else {
+		_, e := io.CopyN(&buf, objReader, int64(grpcutil.MaxMsgSize))
+		if e != nil {
+			fmt.Println("unexpected e: ", e.Error())
+		}
+		gfr := &pfs.GetFileResponse {
+			File: file,
+			Value: buf.Bytes(),
+		}
+		fmt.Println("gfr: ", gfr)
+		b, err := proto.Marshal(gfr)
+		if err != nil {
+			fmt.Println("marshalling error")
+		}
+		_, e = streamingGFRReader.Buffer.Write(b)
+		if e != nil {
+			fmt.Println("gfr write err: ", e.Error())
+		}
+		return streamingGFRReader
+		//buf.Reset()
+	}
+	//written, err := io.CopyN(&buf, objReader, int64(grpcutil.MaxMsgSize))
+	//fmt.Println("written: ", written)
+	//fmt.Println("err: ", err)
+	//fmt.Println("buf: ", buf.String())
+	fmt.Println("Done with reader")
+	//objReader.
+	return nil
+}
+
 // If full is false, exclude potentially large fields such as `Objects`
 // and `Children`
 func nodeToFileInfo(ci *pfs.CommitInfo, path string, node *hashtree.NodeProto, full bool) *pfs.FileInfo {

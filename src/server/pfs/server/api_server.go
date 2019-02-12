@@ -287,7 +287,7 @@ func (a *apiServer) GetFileStream(request *pfs.GetFileRequest, apiGetFileStreamS
 	func() { a.Log(request, nil, nil, 0) }()
 	defer func(start time.Time) { a.Log(request, nil, retErr, time.Since(start)) }(time.Now())
 
-	file, err := a.driver.getFile(a.getPachClient(apiGetFileStreamServer.Context()), request.File, request.OffsetBytes, request.SizeBytes)
+	file, err := a.driver.getFiles(a.getPachClient(apiGetFileStreamServer.Context()), request.File, request.OffsetBytes, request.SizeBytes)
 	if err != nil {
 		return err
 	}

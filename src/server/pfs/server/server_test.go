@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
+	"github.com/gogo/protobuf/proto"
 	"io"
 	"io/ioutil"
 	"math/rand"
@@ -2046,9 +2047,18 @@ func TestGetFileStream(t *testing.T) {
 		if err != nil {
 			fmt.Println(err.Error())
 		}
+
+
 		//require.NoError(t, err)
 		//require.Equal(t, path, string(resp.Value[:]))
 		fmt.Println("got resp: ", resp)
+		resp2 := &pfs.GetFileResponse{}
+		err = proto.Unmarshal(resp.Value, resp2)
+		if err != nil {
+			fmt.Println("unmarshal err: ", err.Error())
+		}
+
+		fmt.Println("resp2: ", resp2)
 	}
 }
 
