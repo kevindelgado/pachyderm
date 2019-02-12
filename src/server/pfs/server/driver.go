@@ -3,6 +3,7 @@ package server
 import (
 	"bufio"
 	"bytes"
+	"context"
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
@@ -2511,6 +2512,8 @@ func (d *driver) getFile(pachClient *client.APIClient, file *pfs.File, offset in
 	var found bool
 	if err := hashtree.Glob(rs, file.Path, func(path string, node *hashtree.NodeProto) error {
 		if node.FileNode == nil {
+			// TODO(kdelga) this is where we filter out GetFile calls on directories.
+			// Gonna want to add logic here to (if recursive flag is set) do a proper walk and get all valid files.
 			return nil
 		}
 		blockRefs = append(blockRefs, node.FileNode.BlockRefs...)
@@ -2536,6 +2539,14 @@ func (d *driver) getFile(pachClient *client.APIClient, file *pfs.File, offset in
 		return nil, err
 	}
 	return grpcutil.NewStreamingBytesReader(getBlocksClient, nil), nil
+}
+
+func NewStreamingGFRReader(client grpcutil.StreamingBytesClient, cancel context.CancelFunc) io.ReadCloser {
+	return &reader{client: client, cancel: cancel}
+}
+
+type reader struct {
+	client grpcu
 }
 
 // If full is false, exclude potentially large fields such as `Objects`
@@ -3298,6 +3309,7 @@ func (s *putFileServer) Peek() (*pfs.PutFileRequest, error) {
 }
 
 func (d *driver) forEachPutFile(pachClient *client.APIClient, server pfs.API_PutFileServer, f func(*pfs.PutFileRequest, io.Reader) error) (oneOff bool, repo string, branch string, err error) {
+	fmt.Println("inside forEachPutFile")
 	limiter := limit.New(client.DefaultMaxConcurrentStreams)
 	var pr *io.PipeReader
 	var pw *io.PipeWriter
@@ -3306,6 +3318,7 @@ func (d *driver) forEachPutFile(pachClient *client.APIClient, server pfs.API_Put
 	var rawCommitID string
 	var commitID string
 
+	// TODO(kdelga): note , here we obtain the put file request from the putfile server.
 	for req, err = server.Recv(); err == nil; req, err = server.Recv() {
 		req := req
 		if req.File != nil {

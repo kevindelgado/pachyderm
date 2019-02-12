@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	"github.com/gogo/protobuf/types"
+	proto "github.com/golang/protobuf/proto"
 	"github.com/pachyderm/pachyderm/src/client/pfs"
 	"github.com/pachyderm/pachyderm/src/client/pkg/grpcutil"
 	"github.com/pachyderm/pachyderm/src/server/pkg/errutil"
@@ -772,13 +773,13 @@ type GetFileClient interface {
 }
 
 type getFileClient struct {
-	c pfs.API_GetFileStreamClient
+	c pfs.API_GetFilesClient
 	mu sync.Mutex
 	oneoff bool
 }
 
 func (c APIClient) newOneoffGetFileClient(repoName string, commitID string, path string, offset int64, size int64 /*, writer io.Writer*/) (GetFileClient, error) {
-	gfc, err := c.getFileStream(repoName, commitID, path, offset, size)
+	gfc, err := c.getFiles(repoName, commitID, path, offset, size)
 
 	if err != nil {
 		return nil, grpcutil.ScrubGRPC(err)
@@ -788,18 +789,74 @@ func (c APIClient) newOneoffGetFileClient(repoName string, commitID string, path
 
 //TODO(kdelga): It smells bad to pass the receiver as an arg (see other interface funcs too)
 func (c getFileClient) GetFile(repoName, commitID, path string, offset, size int64, writer io.Writer) error {
-	if err := grpcutil.WriteFromStreamingBytesClient(c, writer); err != nil {
-		return grpcutil.ScrubGRPC(err)
+	//if err := grpcutil.WriteFromStreamingBytesClient(c, writer); err != nil {
+	//	return grpcutil.ScrubGRPC(err)
+	//}
+	for msg, err := c.Recv(); err != io.EOF; msg, err = c.Recv() {
+		if err != nil {
+			return grpcutil.ScrubGRPC(err)
+		}
+
+		b, err := proto.Marshal(msg)
+		if err != nil {
+			return grpcutil.ScrubGRPC(err)
+		}
+
+		if _, err = writer.Write(b); err != nil {
+			return grpcutil.ScrubGRPC(err)
+		}
 	}
 	return nil
 }
 
-func (c getFileClient) Recv() (*types.BytesValue, error) {
-	gfr, err := c.c.Recv()
-	return &types.BytesValue{
-		Value: gfr.Value,
-	}, err
+//func (c getFileClient) Recv() (*types.BytesValue, error) {
+//	gfr, err := c.c.Recv()
+//	return &types.BytesValue{
+//		Value: gfr.Value,
+//	}, err
+//}
+func (c getFileClient) Recv() (*pfs.GetFileResponse, error) {
+	return c.c.Recv()
 }
+
+
+type GetFilesServer struct {
+	S pfs.API_GetFilesServer
+	File *pfs.File
+}
+
+func (s GetFilesServer) Send(response *pfs.GetFileResponse) error {
+	return s.S.Send(response)
+}
+
+//func (s GetFilesServer) Write()
+func (s GetFilesServer) Write(p []byte) (int, error) {
+	if len(p) == 0 {
+		return 0, nil
+	}
+	//if err := s.streamingBytesServer.Send(&types.BytesValue{Value: p}); err != nil {
+	var gfr *pfs.GetFileResponse
+	if err := proto.Unmarshal(p, gfr); err != nil{
+		return 0, err
+	}
+	if err := s.Send(gfr); err != nil {
+		return 0, err
+	}
+	return len(p), nil
+}
+
+/*
+func (s GetFilesServer) Send(bytesValue *types.BytesValue) error {
+	gfr := &pfs.GetFileResponse{
+		//TODO(kdelga): I guess here is where we want to do our metadata stuff
+		// maybe this should be added to driver?
+		Value: bytesValue.Value,
+	}
+	return s.S.Send(gfr)
+}
+*/
+
+
 
 // PutFileClient is a client interface for putting files. There are 2
 // implementations, 1 that does each file as a seperate request and one that
@@ -1060,7 +1117,7 @@ func (c APIClient) GetFile(repoName string, commitID string, path string, offset
 	return nil
 }
 
-func (c APIClient) GetFileStream(repoName string, commitID string, path string, offset int64, size int64, writer io.Writer) error {
+func (c APIClient) GetFiles(repoName string, commitID string, path string, offset int64, size int64, writer io.Writer) error {
 	//TODO(kdelga): understand what this limiter stuff is doing and if it's needed.
 	//if c.limiter != nil {
 	//	c.limiter.Acquire()
@@ -1119,9 +1176,9 @@ func (c APIClient) getFile(repoName string, commitID string, path string, offset
 	)
 }
 
-func (c APIClient) getFileStream(repoName string, commitID string, path string, offset int64,
-	size int64) (pfs.API_GetFileStreamClient, error) {
-	return c.PfsAPIClient.GetFileStream(
+func (c APIClient) getFiles(repoName string, commitID string, path string, offset int64,
+	size int64) (pfs.API_GetFilesClient, error) {
+	return c.PfsAPIClient.GetFiles(
 		c.Ctx(),
 		&pfs.GetFileRequest{
 			File:        NewFile(repoName, commitID, path),

@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"io"
 	"sync"
 	"time"
 
@@ -268,35 +269,35 @@ func (a *apiServer) CopyFile(ctx context.Context, request *pfs.CopyFileRequest) 
 	return &types.Empty{}, nil
 }
 
-//TODO(kdelga): should this go in client/pfs.go?
-type getFileStreamServer struct {
-	s pfs.API_GetFileStreamServer
-}
 
-func (s getFileStreamServer) Send(bytesValue *types.BytesValue) error {
-	gfr := &pfs.GetFileResponse{
-		//TODO(kdelga): I guess here is where we want to do our metadata stuff
-		// maybe this should be added to driver?
-		File: nil,
-		Value: bytesValue.Value,
-	}
-	return s.s.Send(gfr)
-}
 
-func (a *apiServer) GetFileStream(request *pfs.GetFileRequest, apiGetFileStreamServer pfs.API_GetFileStreamServer) (retErr error) {
+func (a *apiServer) GetFiles(request *pfs.GetFileRequest, apiGetFilesServer pfs.API_GetFilesServer) (retErr error) {
+	fmt.Println("inside apiServer.GetFiles offset is: ", request.OffsetBytes)
 	func() { a.Log(request, nil, nil, 0) }()
 	defer func(start time.Time) { a.Log(request, nil, retErr, time.Since(start)) }(time.Now())
 
-	file, err := a.driver.getFile(a.getPachClient(apiGetFileStreamServer.Context()), request.File, request.OffsetBytes, request.SizeBytes)
+	file, err := a.driver.getFile(a.getPachClient(apiGetFilesServer.Context()), request.File, request.OffsetBytes, request.SizeBytes)
 	if err != nil {
 		return err
 	}
 
-	gfss := &getFileStreamServer{
-		s: apiGetFileStreamServer,
+	gfs := &client.GetFilesServer {
+		S: apiGetFilesServer,
+		File: request.File,
 	}
 
-	return grpcutil.WriteToStreamingBytesServer(file, gfss)
+	//if request.OffsetBytes == 0 {
+	//	gfs.File = *request.File
+	//	fmt.Println("gfs file path: ", gfs.File.Path)
+	//}
+
+	//return grpcutil.WriteToStreamingBytesServer(file, gfs)
+
+	// Don't use grpcutil
+	buf := grpcutil.GetBuffer()
+	defer grpcutil.PutBuffer(buf)
+	_, err = io.CopyBuffer(*gfs, grpcutil.ReaderWrapper{file}, buf)
+	return err
 }
 
 func (a *apiServer) GetFile(request *pfs.GetFileRequest, apiGetFileServer pfs.API_GetFileServer) (retErr error) {
