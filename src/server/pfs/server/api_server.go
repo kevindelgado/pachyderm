@@ -281,12 +281,6 @@ func (s getFileStreamServer) Send(bytesValue *types.BytesValue) error {
 		fmt.Println("send err: ", err.Error())
 		return err
 	}
-	//gfr := &pfs.GetFileResponse{
-	//	//TODO(kdelga): I guess here is where we want to do our metadata stuff
-	//	// maybe this should be added to driver?
-	//	File: nil,
-	//	Value: bytesValue.Value,
-	//}
 	return s.s.Send(gfr)
 }
 
@@ -294,16 +288,19 @@ func (a *apiServer) GetFileStream(request *pfs.GetFileRequest, apiGetFileStreamS
 	func() { a.Log(request, nil, nil, 0) }()
 	defer func(start time.Time) { a.Log(request, nil, retErr, time.Since(start)) }(time.Now())
 
-	file, err := a.driver.getFiles(a.getPachClient(apiGetFileStreamServer.Context()), request.File, request.OffsetBytes, request.SizeBytes)
+	//file, err := a.driver.getFiles(a.getPachClient(apiGetFileStreamServer.Context()), request.File, request.OffsetBytes, request.SizeBytes)
+	file, err := a.driver.getFile(a.getPachClient(apiGetFileStreamServer.Context()), request.File, request.OffsetBytes, request.SizeBytes)
 	if err != nil {
 		return err
 	}
+
+	gfrReader := a.driver.filesFromByteStream(a.getPachClient(apiGetFileStreamServer.Context()), file, request.File, request.OffsetBytes, request.SizeBytes)
 
 	gfss := &getFileStreamServer{
 		s: apiGetFileStreamServer,
 	}
 
-	return grpcutil.WriteToStreamingBytesServer(file, gfss)
+	return grpcutil.WriteToStreamingBytesServer(gfrReader, gfss)
 }
 
 func (a *apiServer) GetFile(request *pfs.GetFileRequest, apiGetFileServer pfs.API_GetFileServer) (retErr error) {
