@@ -2002,7 +2002,7 @@ func TestGetFile(t *testing.T) {
 	})
 }
 
-func TestGetFileStream(t *testing.T) {
+func TestGetFiles(t *testing.T) {
 	c := GetPachClient(t)
 	require.NoError(t, c.CreateRepo("repo"))
 	pfclient, err := c.PfsAPIClient.PutFile(context.Background())
@@ -2038,7 +2038,7 @@ func TestGetFileStream(t *testing.T) {
 			SizeBytes: 0,
 		}
 		// TODO(kdelga): change this to only take context and let Recv take the gfr as arg
-		gfsclient, err := c.PfsAPIClient.GetFileStream(context.Background(), gfr)
+		gfsclient, err := c.PfsAPIClient.GetFiles(context.Background(), gfr)
 		if err != nil {
 			fmt.Println(err.Error())
 		}

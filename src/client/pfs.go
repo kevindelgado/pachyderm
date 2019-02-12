@@ -772,13 +772,13 @@ type GetFileClient interface {
 }
 
 type getFileClient struct {
-	c pfs.API_GetFileStreamClient
+	c pfs.API_GetFilesClient
 	mu sync.Mutex
 	oneoff bool
 }
 
 func (c APIClient) newOneoffGetFileClient(repoName string, commitID string, path string, offset int64, size int64 /*, writer io.Writer*/) (GetFileClient, error) {
-	gfc, err := c.getFileStream(repoName, commitID, path, offset, size)
+	gfc, err := c.getFiles(repoName, commitID, path, offset, size)
 
 	if err != nil {
 		return nil, grpcutil.ScrubGRPC(err)
@@ -1119,9 +1119,9 @@ func (c APIClient) getFile(repoName string, commitID string, path string, offset
 	)
 }
 
-func (c APIClient) getFileStream(repoName string, commitID string, path string, offset int64,
-	size int64) (pfs.API_GetFileStreamClient, error) {
-	return c.PfsAPIClient.GetFileStream(
+func (c APIClient) getFiles(repoName string, commitID string, path string, offset int64,
+	size int64) (pfs.API_GetFilesClient, error) {
+	return c.PfsAPIClient.GetFiles(
 		c.Ctx(),
 		&pfs.GetFileRequest{
 			File:        NewFile(repoName, commitID, path),

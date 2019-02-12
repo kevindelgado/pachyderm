@@ -270,11 +270,11 @@ func (a *apiServer) CopyFile(ctx context.Context, request *pfs.CopyFileRequest) 
 }
 
 //TODO(kdelga): should this go in client/pfs.go?
-type getFileStreamServer struct {
-	s pfs.API_GetFileStreamServer
+type getFilesServer struct {
+	s pfs.API_GetFilesServer
 }
 
-func (s getFileStreamServer) Send(bytesValue *types.BytesValue) error {
+func (s getFilesServer) Send(bytesValue *types.BytesValue) error {
 	gfr := new(pfs.GetFileResponse)
 	err := proto.Unmarshal(bytesValue.Value, gfr)
 	if err != nil {
@@ -284,7 +284,7 @@ func (s getFileStreamServer) Send(bytesValue *types.BytesValue) error {
 	return s.s.Send(gfr)
 }
 
-func (a *apiServer) GetFileStream(request *pfs.GetFileRequest, apiGetFileStreamServer pfs.API_GetFileStreamServer) (retErr error) {
+func (a *apiServer) GetFiles(request *pfs.GetFileRequest, apiGetFileStreamServer pfs.API_GetFilesServer) (retErr error) {
 	func() { a.Log(request, nil, nil, 0) }()
 	defer func(start time.Time) { a.Log(request, nil, retErr, time.Since(start)) }(time.Now())
 
@@ -299,7 +299,7 @@ func (a *apiServer) GetFileStream(request *pfs.GetFileRequest, apiGetFileStreamS
 		return err
 	}
 
-	gfss := &getFileStreamServer{
+	gfss := &getFilesServer{
 		s: apiGetFileStreamServer,
 	}
 

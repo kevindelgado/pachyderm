@@ -2548,6 +2548,7 @@ func (d *driver) filesFromByteStream(pachClient *client.APIClient, objReader io.
 		Cancel: nil,
 	}
 	var i int64
+
 	// If the size of the requested file is larger than max message size,
 	// it must be split into multiple GetFileResponse messages
 	// with only the first containing non-nil File metadata.
