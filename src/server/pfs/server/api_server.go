@@ -296,6 +296,7 @@ func (a *apiServer) GetFileStream(request *pfs.GetFileRequest, apiGetFileStreamS
 		s: apiGetFileStreamServer,
 	}
 
+	//TODO(kdelga): This will need to write to a streaming gfr server
 	return grpcutil.WriteToStreamingBytesServer(file, gfss)
 }
 

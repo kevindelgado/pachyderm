@@ -383,6 +383,7 @@ func (s *objBlockAPIServer) GetObject(request *pfsclient.Object, getObjectServer
 				retErr = err
 			}
 		}()
+		fmt.Println("object singular if")
 		return grpcutil.WriteToStreamingBytesServer(r, getObjectServer)
 	}
 	var data []byte
@@ -390,6 +391,7 @@ func (s *objBlockAPIServer) GetObject(request *pfsclient.Object, getObjectServer
 	if err := s.objectCache.Get(getObjectServer.Context(), s.splitKey(request.Hash), sink); err != nil {
 		return err
 	}
+	fmt.Println("object singular last")
 	return grpcutil.WriteToStreamingBytesServer(bytes.NewReader(data), getObjectServer)
 }
 
@@ -398,7 +400,7 @@ func (s *objBlockAPIServer) GetObjects(request *pfsclient.GetObjectsRequest, get
 	defer func(start time.Time) { s.Log(request, nil, retErr, time.Since(start)) }(time.Now())
 	offset := request.OffsetBytes
 	size := request.SizeBytes
-	for _, object := range request.Objects {
+	for i, object := range request.Objects {
 		// First we inspect the object to see how big it is.
 		objectInfo, err := s.InspectObject(getObjectsServer.Context(), object)
 		if err != nil {
@@ -430,6 +432,7 @@ func (s *objBlockAPIServer) GetObjects(request *pfsclient.GetObjectsRequest, get
 			if err != nil {
 				return err
 			}
+			fmt.Println("objects plural if: ", i)
 			if err := grpcutil.WriteToStreamingBytesServer(r, getObjectsServer); err != nil {
 				return err
 			}
@@ -445,6 +448,15 @@ func (s *objBlockAPIServer) GetObjects(request *pfsclient.GetObjectsRequest, get
 			if uint64(len(data)) < offset+readSize {
 				return fmt.Errorf("undersized object (this is likely a bug)")
 			}
+			fmt.Println("objects plural else: ", i)
+			//TODO(kdelga): generate GFR with non-nil file on first obj of the get, then write these files to a streaming gfr server.
+			// if i = 0 :
+			//resp := &pfsclient.GetFileResponse{
+			//	File: request.File,
+			//  Value:
+			//}
+
+			//if err := WriteToStreamingGFRServer()
 			if err := grpcutil.WriteToStreamingBytesServer(bytes.NewReader(data[offset:offset+readSize]), getObjectsServer); err != nil {
 				return err
 			}
