@@ -2035,63 +2035,6 @@ func TestGetFiles(t *testing.T) {
 	}
 }
 
-func TestGetFiles2(t *testing.T) {
-	c := GetPachClient(t)
-	require.NoError(t, c.CreateRepo("repo"))
-	pfclient, err := c.PfsAPIClient.PutFile(c.Ctx())
-	require.NoError(t, err)
-	paths := []string{"foo", "bar", "fizz", "buzz"}
-	for i, path := range paths {
-		// Why are we using pfclient.Send instead of one of the PutFileClient interface methods.
-		if i == 0 || i == 2 {
-			require.NoError(t, pfclient.Send(&pfs.PutFileRequest{
-				File:  pclient.NewFile("repo", "master", path),
-				Value: []byte(path),
-			}))
-		} else {
-			require.NoError(t, pfclient.Send(&pfs.PutFileRequest{
-				Value: []byte(path),
-			}))
-		}
-
-	}
-	_, err = pfclient.CloseAndRecv()
-	require.NoError(t, err)
-
-	cis, err := c.ListCommit("repo", "", "", 0)
-	require.Equal(t, 1, len(cis))
-
-	for _, path := range paths {
-		gfr := &pfs.GetFileRequest{
-			File: pclient.NewFile("repo", "master", path),
-			//File: pclient.NewFile("repo", "master", "*"),
-			OffsetBytes: 0,
-			SizeBytes: 0,
-		}
-		gfsclient, err := c.PfsAPIClient.GetFiles(c.Ctx(), gfr)
-		if err != nil {
-			fmt.Println(err.Error())
-		}
-		//require.NoError(t, err)
-		resp, err := gfsclient.Recv()
-		if err != nil {
-			fmt.Println(err.Error())
-		}
-
-
-		//require.NoError(t, err)
-		//require.Equal(t, path, string(resp.Value[:]))
-		fmt.Println("got resp: ", resp)
-		//resp2 := &pfs.GetFileResponse{}
-		//err = proto.Unmarshal(resp.Value, resp2)
-		//if err != nil {
-		//	fmt.Println("unmarshal err: ", err.Error())
-		//}
-
-		//fmt.Println("resp2: ", resp2)
-	}
-}
-
 func TestManyPutsSingleFileSingleCommit(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping long tests in short mode")
