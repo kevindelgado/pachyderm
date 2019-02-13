@@ -2,7 +2,6 @@ package server
 
 import (
 	"fmt"
-	"github.com/gogo/protobuf/proto"
 	"sync"
 	"time"
 
@@ -269,21 +268,6 @@ func (a *apiServer) CopyFile(ctx context.Context, request *pfs.CopyFileRequest) 
 	return &types.Empty{}, nil
 }
 
-//TODO(kdelga): should this go in client/pfs.go?
-type getFilesServer struct {
-	s pfs.API_GetFilesServer
-}
-
-func (s getFilesServer) Send(bytesValue *types.BytesValue) error {
-	gfr := new(pfs.GetFileResponse)
-	err := proto.Unmarshal(bytesValue.Value, gfr)
-	if err != nil {
-		fmt.Println("send err: ", err.Error())
-		return err
-	}
-	return s.s.Send(gfr)
-}
-
 func (a *apiServer) GetFiles(request *pfs.GetFileRequest, apiGetFileStreamServer pfs.API_GetFilesServer) (retErr error) {
 	func() { a.Log(request, nil, nil, 0) }()
 	defer func(start time.Time) { a.Log(request, nil, retErr, time.Since(start)) }(time.Now())
@@ -299,11 +283,11 @@ func (a *apiServer) GetFiles(request *pfs.GetFileRequest, apiGetFileStreamServer
 		return err
 	}
 
-	gfss := &getFilesServer{
-		s: apiGetFileStreamServer,
+	gfs := &client.GetFilesServer{
+		S: apiGetFileStreamServer,
 	}
 
-	return grpcutil.WriteToStreamingBytesServer(gfrReader, gfss)
+	return grpcutil.WriteToStreamingBytesServer(gfrReader, gfs)
 }
 
 func (a *apiServer) GetFile(request *pfs.GetFileRequest, apiGetFileServer pfs.API_GetFileServer) (retErr error) {

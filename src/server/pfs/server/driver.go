@@ -2538,21 +2538,17 @@ func (d *driver) getFile(pachClient *client.APIClient, file *pfs.File, offset in
 	return grpcutil.NewStreamingBytesReader(getBlocksClient, nil), nil
 }
 
-// TODO(kdelga): what does size mean if it's 0?
 func (d *driver) filesFromByteStream(pachClient *client.APIClient, objReader io.Reader, file *pfs.File, offset, size int64) (io.ReadCloser, error) {
-	fmt.Println("start reader")
-	fmt.Println("file: ", file, " offset: ", offset, " size: ", size)
 	var buf bytes.Buffer
 	streamingGFRReader := &pfs.StreamingGFRReader{
 		Buffer: buf,
 		Cancel: nil,
 	}
-	var i int64
 
 	// If the size of the requested file is larger than max message size,
 	// it must be split into multiple GetFileResponse messages
 	// with only the first containing non-nil File metadata.
-	for i = 0; i <= size; i += int64(grpcutil.MaxMsgSize) {
+	for i := int64(0); i <= size; i += int64(grpcutil.MaxMsgSize) {
 		_, err := io.CopyN(&buf, objReader, int64(grpcutil.MaxMsgSize))
 		if err != nil && err != io.EOF {
 			return nil, err

@@ -7,6 +7,7 @@ import (
 	"io"
 	"sync"
 
+	"github.com/gogo/protobuf/proto"
 	"github.com/gogo/protobuf/types"
 	"github.com/pachyderm/pachyderm/src/client/pfs"
 	"github.com/pachyderm/pachyderm/src/client/pkg/grpcutil"
@@ -771,34 +772,48 @@ type GetFileClient interface {
 	//GetFileReadSeeker(repoName string, commitID string, path string) (io.ReadSeeker, error)
 }
 
-type getFileClient struct {
+type getFilesClient struct {
 	c pfs.API_GetFilesClient
 	mu sync.Mutex
 	oneoff bool
 }
 
-func (c APIClient) newOneoffGetFileClient(repoName string, commitID string, path string, offset int64, size int64 /*, writer io.Writer*/) (GetFileClient, error) {
+func (c APIClient) newOneoffGetFilesClient(repoName string, commitID string, path string, offset int64, size int64 /*, writer io.Writer*/) (GetFileClient, error) {
 	gfc, err := c.getFiles(repoName, commitID, path, offset, size)
 
 	if err != nil {
 		return nil, grpcutil.ScrubGRPC(err)
 	}
-	return &getFileClient{c: gfc, oneoff: true}, nil
+	return &getFilesClient{c: gfc, oneoff: true}, nil
 }
 
 //TODO(kdelga): It smells bad to pass the receiver as an arg (see other interface funcs too)
-func (c getFileClient) GetFile(repoName, commitID, path string, offset, size int64, writer io.Writer) error {
+func (c getFilesClient) GetFile(repoName, commitID, path string, offset, size int64, writer io.Writer) error {
 	if err := grpcutil.WriteFromStreamingBytesClient(c, writer); err != nil {
 		return grpcutil.ScrubGRPC(err)
 	}
 	return nil
 }
 
-func (c getFileClient) Recv() (*types.BytesValue, error) {
+func (c getFilesClient) Recv() (*types.BytesValue, error) {
 	gfr, err := c.c.Recv()
 	return &types.BytesValue{
 		Value: gfr.Value,
 	}, err
+}
+
+type GetFilesServer struct {
+	S pfs.API_GetFilesServer
+}
+
+func (s GetFilesServer) Send(bytesValue *types.BytesValue) error {
+	gfr := new(pfs.GetFileResponse)
+	err := proto.Unmarshal(bytesValue.Value, gfr)
+	if err != nil {
+		fmt.Println("send err: ", err.Error())
+		return err
+	}
+	return s.S.Send(gfr)
 }
 
 // PutFileClient is a client interface for putting files. There are 2
@@ -1067,7 +1082,7 @@ func (c APIClient) GetFileStream(repoName string, commitID string, path string, 
 	//	defer c.limiter.Release()
 	//}
 
-	gfc, err := c.newOneoffGetFileClient(repoName, commitID, path, offset, size)//, writer)
+	gfc, err := c.newOneoffGetFilesClient(repoName, commitID, path, offset, size) //, writer)
 	if err != nil {
 		return err
 	}
