@@ -2401,6 +2401,27 @@ func (d *driver) getFile(pachClient *client.APIClient, file *pfs.File, offset in
 	if err != nil {
 		return nil, nil, err
 	}
+
+	var (
+		objects   []*pfs.Object
+		blockRefs []*pfs.BlockRef
+		totalSize uint64
+		nodes     []*hashtree.NodeProto
+		isInput   bool
+	)
+	walkCallback := func(p string, child *hashtree.NodeProto) error {
+		if child.FileNode == nil {
+			return nil
+		}
+		nodes = append(nodes, child)
+		if isInput {
+			objects = append(objects, child.FileNode.Objects...)
+		} else {
+			blockRefs = append(blockRefs, child.FileNode.BlockRefs...)
+		}
+		totalSize += uint64(child.SubtreeSize)
+		return nil
+	}
 	// Handle commits to input repos
 	if commitInfo.Provenance == nil {
 		tree, err := d.getTreeForFile(pachClient, client.NewFile(file.Commit.Repo.Name, file.Commit.ID, ""))
@@ -2409,56 +2430,56 @@ func (d *driver) getFile(pachClient *client.APIClient, file *pfs.File, offset in
 		}
 		var (
 			pathsFound int
-			objects    []*pfs.Object
-			totalSize  uint64
 			footer     *pfs.Object
 			prevDir    string
-			nodes      []*hashtree.NodeProto
 		)
+
+		//visited = make(map[*hashtree.NodeProto]bool)
 		if err := tree.Glob(file.Path, func(p string, node *hashtree.NodeProto) error {
 			pathsFound++
 			if node.FileNode == nil {
-				return nil
-			}
-
-			// add footer + header for next dir. If a user calls e.g.
-			// 'GetFile("/*/*")', then the output looks like:
-			// [d1 header][d1/1]...[d1/n][d1 footer] [d2 header]...[d2 footer] ...
-			parentPath := path.Dir(p)
-			if parentPath != prevDir {
-				if footer != nil {
-					objects = append(objects, footer)
+				isInput = true
+				return tree.Walk(node.GetName(), walkCallback)
+			} else {
+				// add footer + header for next dir. If a user calls e.g.
+				// 'GetFile("/*/*")', then the output looks like:
+				// [d1 header][d1/1]...[d1/n][d1 footer] [d2 header]...[d2 footer] ...
+				parentPath := path.Dir(p)
+				if parentPath != prevDir {
+					if footer != nil {
+						objects = append(objects, footer)
+					}
+					footer = nil // don't apply footer twice if next dir has no footer
+					prevDir = parentPath
+					if node.FileNode.HasHeaderFooter {
+						// if any child of 'node's parent directory has HasHeaderFooter set,
+						// then they all should
+						parentNode, err := tree.Get(parentPath)
+						if err != nil {
+							return fmt.Errorf("file %q has a header, but could not "+
+								"retrieve parent node at %q to get header content: %v", p,
+								parentPath, err)
+						}
+						if parentNode.DirNode == nil {
+							return fmt.Errorf("parent of %q is not a directory—this is "+
+								"likely an internal error", p)
+						}
+						if parentNode.DirNode.Shared == nil {
+							return fmt.Errorf("file %q has a shared header or footer, "+
+								"but parent directory does not permit shared data", p)
+						}
+						if parentNode.DirNode.Shared.Header != nil {
+							objects = append(objects, parentNode.DirNode.Shared.Header)
+						}
+						if parentNode.DirNode.Shared.Footer != nil {
+							footer = parentNode.DirNode.Shared.Footer
+						}
+					}
 				}
-				footer = nil // don't apply footer twice if next dir has no footer
-				prevDir = parentPath
-				if node.FileNode.HasHeaderFooter {
-					// if any child of 'node's parent directory has HasHeaderFooter set,
-					// then they all should
-					parentNode, err := tree.Get(parentPath)
-					if err != nil {
-						return fmt.Errorf("file %q has a header, but could not "+
-							"retrieve parent node at %q to get header content: %v", p,
-							parentPath, err)
-					}
-					if parentNode.DirNode == nil {
-						return fmt.Errorf("parent of %q is not a directory—this is "+
-							"likely an internal error", p)
-					}
-					if parentNode.DirNode.Shared == nil {
-						return fmt.Errorf("file %q has a shared header or footer, "+
-							"but parent directory does not permit shared data", p)
-					}
-					if parentNode.DirNode.Shared.Header != nil {
-						objects = append(objects, parentNode.DirNode.Shared.Header)
-					}
-					if parentNode.DirNode.Shared.Footer != nil {
-						footer = parentNode.DirNode.Shared.Footer
-					}
-				}
+				nodes = append(nodes, node)
+				objects = append(objects, node.FileNode.Objects...)
+				totalSize += uint64(node.SubtreeSize)
 			}
-			nodes = append(nodes, node)
-			objects = append(objects, node.FileNode.Objects...)
-			totalSize += uint64(node.SubtreeSize)
 			return nil
 		}); err != nil {
 			return nil, nil, err
@@ -2508,15 +2529,15 @@ func (d *driver) getFile(pachClient *client.APIClient, file *pfs.File, offset in
 			}
 		}
 	}()
-	blockRefs := []*pfs.BlockRef{}
-	var totalSize int64
 	var found bool
 	if err := hashtree.Glob(rs, file.Path, func(path string, node *hashtree.NodeProto) error {
 		if node.FileNode == nil {
-			return nil
+			isInput = false
+			return hashtree.Walk(rs, node.GetName(), walkCallback)
 		}
 		blockRefs = append(blockRefs, node.FileNode.BlockRefs...)
-		totalSize += node.SubtreeSize
+		nodes = append(nodes, node)
+		totalSize += uint64(node.SubtreeSize)
 		found = true
 		return nil
 	}); err != nil {
