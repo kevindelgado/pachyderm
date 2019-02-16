@@ -272,7 +272,7 @@ func (a *apiServer) GetFile(request *pfs.GetFileRequest, apiGetFileServer pfs.AP
 	func() { a.Log(request, nil, nil, 0) }()
 	defer func(start time.Time) { a.Log(request, nil, retErr, time.Since(start)) }(time.Now())
 
-	file, _, err := a.driver.getFile(a.getPachClient(apiGetFileServer.Context()), request.File, request.OffsetBytes, request.SizeBytes)
+	file, _, err := a.driver.getFile(a.getPachClient(apiGetFileServer.Context()), request.File, request.OffsetBytes, request.SizeBytes, false)
 	if err != nil {
 		return err
 	}
@@ -287,7 +287,8 @@ func (a *apiServer) GetFiles(request *pfs.GetFileRequest, apiGetFilesServer pfs.
 	}(time.Now())
 
 	// First we collect the nodes that we've gotten from getFile().
-	file, nodes, err := a.driver.getFile(a.getPachClient(apiGetFilesServer.Context()), request.File, request.OffsetBytes, request.SizeBytes)
+	// TODO(kdelg): Get the recursive flag from request.Recursive.
+	file, nodes, err := a.driver.getFile(a.getPachClient(apiGetFilesServer.Context()), request.File, request.OffsetBytes, request.SizeBytes, true)
 	if err != nil {
 		return err
 	}

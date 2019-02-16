@@ -2034,7 +2034,7 @@ func TestGetFiles(t *testing.T) {
 	require.Equal(t, i, 4)
 }
 
-func TestGetFilesDirectory(t *testing.T) {
+func TestGetFilesRecursive(t *testing.T) {
 	c := GetPachClient(t)
 
 	// Put some files in a new repo/commit.
