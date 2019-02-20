@@ -1260,6 +1260,7 @@ func (m *MergeReader) Glob(pattern string, f func(string, *NodeProto) error) (re
 		return errorf(MalformedGlob, err.Error())
 	}
 	return m.nodes(func(path string, node *NodeProto) error {
+		fmt.Println("db glob p", path)
 		if g.Match(path) {
 			return f(externalDefault(path), node)
 		}
@@ -1324,6 +1325,7 @@ func (m *MergeReader) Walk(walkPath string, f func(string, *NodeProto) error) er
 }
 
 func (m *MergeReader) nodes(f func(string, *NodeProto) error) error {
+	fmt.Println("mq length", len(m.mq.q))
 	for m.mq.q[1] != nil {
 		// Get next node
 		ns, err := m.mq.next()
