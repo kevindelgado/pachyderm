@@ -173,25 +173,41 @@ func (p *Puller) Pull(client *pachclient.APIClient, root string, repo, commit, f
 		if fileInfo.FileType == pfs.FileType_DIR {
 			return os.MkdirAll(path, 0700)
 		}
-		if pipes {
-			return p.makePipe(path, func(w io.Writer) error {
-				return client.GetFile(repo, commit, fileInfo.File.Path, 0, 0, w)
-			})
-		}
 		if emptyFiles {
 			return p.makeFile(path, func(w io.Writer) error { return nil })
 		}
-		eg.Go(func() (retErr error) {
-			limiter.Acquire()
-			defer limiter.Release()
-			return p.makeFile(path, func(w io.Writer) error {
-				return client.GetFile(repo, commit, fileInfo.File.Path, 0, 0, w)
-			})
-		})
 		return nil
 	}); err != nil {
 		return err
 	}
+
+	if pipes {
+		err := client.GetFiles(repo, commit, file, 0, 0, func(f *pfs.File, r io.Reader) error {
+			newPath := filepath.Join(root, f.Path)
+			err := p.makePipe(newPath, func(w io.Writer) error {
+				// TODO(kdelga): Are there any gotchas to io copying?
+				_, err := io.Copy(w, r)
+				return err
+			})
+			return err
+		})
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+	eg.Go(func() (retErr error) {
+		limiter.Acquire()
+		defer limiter.Release()
+		return client.GetFiles(repo, commit, file, 0, 0, func(f *pfs.File, r io.Reader) error {
+			newPath := filepath.Join(root, f.Path)
+			err := p.makeFile(newPath, func(w io.Writer) error {
+				_, err := io.Copy(w, r)
+				return err
+			})
+			return err
+		})
+	})
 	return eg.Wait()
 }
 
@@ -227,6 +243,7 @@ func (p *Puller) PullDiff(client *pachclient.APIClient, root string, newRepo, ne
 		}
 		if pipes {
 			if err := p.makePipe(path, func(w io.Writer) error {
+				// TODO(kdelga): Do we need to use GetFiles in PullDiff too?
 				return client.GetFile(newFile.File.Commit.Repo.Name, newFile.File.Commit.ID, newFile.File.Path, 0, 0, w)
 			}); err != nil {
 				return err
