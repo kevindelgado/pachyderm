@@ -2586,12 +2586,13 @@ func (d *driver) getFiles(pachClient *client.APIClient, objReader io.Reader, fil
 				return err
 			}
 			gfr := &pfs.GetFileResponse{
-				Value: buf.Bytes(),
+				FileInfo: &pfs.FileInfo{},
+				Value:    buf.Bytes(),
 			}
 			buf.Reset()
 			if i == 0 {
-				gfr.File = file
-				gfr.File.Path = p
+				gfr.FileInfo.File = file
+				gfr.FileInfo.File.Path = p
 			}
 			err = f(gfr)
 			if err != nil {

@@ -2392,11 +2392,11 @@ func (m *GetFileRequest) GetSizeBytes() int64 {
 }
 
 type GetFileResponse struct {
-	File                 *File    `protobuf:"bytes,1,opt,name=file,proto3" json:"file,omitempty"`
-	Value                []byte   `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	FileInfo             *FileInfo `protobuf:"bytes,1,opt,name=fileInfo,proto3" json:"fileInfo,omitempty"`
+	Value                []byte    `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_unrecognized     []byte    `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
 }
 
 func (m *GetFileResponse) Reset()         { *m = GetFileResponse{} }
@@ -2432,9 +2432,9 @@ func (m *GetFileResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetFileResponse proto.InternalMessageInfo
 
-func (m *GetFileResponse) GetFile() *File {
+func (m *GetFileResponse) GetFileInfo() *FileInfo {
 	if m != nil {
-		return m.File
+		return m.FileInfo
 	}
 	return nil
 }
@@ -4146,7 +4146,7 @@ func init() {
 func init() { proto.RegisterFile("client/pfs/pfs.proto", fileDescriptor_b48f014707f6595c) }
 
 var fileDescriptor_b48f014707f6595c = []byte{
-	// 3087 bytes of a gzipped FileDescriptorProto
+	// 3095 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x5a, 0x5b, 0x6f, 0x1b, 0xc7,
 	0xf5, 0xd7, 0x92, 0x4b, 0x72, 0x79, 0x28, 0x51, 0xd4, 0x58, 0x91, 0x19, 0x3a, 0xbe, 0x64, 0xed,
 	0xe4, 0xef, 0x38, 0x89, 0xa4, 0xc8, 0xff, 0xd4, 0xb7, 0x24, 0x82, 0x75, 0xb1, 0x43, 0xc3, 0xb0,
@@ -4239,107 +4239,108 @@ var fileDescriptor_b48f014707f6595c = []byte{
 	0x01, 0xff, 0x3e, 0x94, 0x78, 0xce, 0xe9, 0x73, 0x72, 0x8e, 0x2f, 0x9b, 0xdf, 0x42, 0xfd, 0x31,
 	0x0e, 0x59, 0x51, 0x16, 0x6b, 0x74, 0x5a, 0xd1, 0xf6, 0x2e, 0x2c, 0x7b, 0xc3, 0x21, 0xc1, 0xa1,
 	0x80, 0x91, 0x02, 0x2b, 0x51, 0x6b, 0x7c, 0x8e, 0x03, 0x49, 0xb6, 0x56, 0x2b, 0x2a, 0x38, 0x63,
-	0x3e, 0x82, 0xd5, 0x68, 0x4b, 0x71, 0x7d, 0x2e, 0xd8, 0x73, 0x1d, 0x4a, 0xaf, 0x6c, 0x77, 0xc6,
-	0x9d, 0xbe, 0x6c, 0xf1, 0x0f, 0xf3, 0x7d, 0xa8, 0x3f, 0x7f, 0x85, 0x83, 0xe3, 0xc0, 0x09, 0x71,
-	0x7b, 0x3a, 0xc0, 0xdf, 0x51, 0x3a, 0x87, 0x0e, 0x98, 0x9c, 0xa2, 0xc5, 0x3f, 0xcc, 0x7f, 0x16,
-	0xa0, 0xfe, 0x62, 0x76, 0x9e, 0x33, 0x46, 0xfb, 0x15, 0x95, 0xfd, 0xe8, 0x6d, 0x3b, 0x0b, 0x5c,
-	0x71, 0x2f, 0xd0, 0x21, 0x7a, 0x87, 0xde, 0xfa, 0xfd, 0x59, 0x40, 0x9c, 0x57, 0x98, 0xe1, 0xa9,
-	0x61, 0xc5, 0x13, 0xe8, 0x23, 0xa8, 0x0e, 0xb0, 0xeb, 0x4c, 0x9c, 0x10, 0x07, 0x0c, 0x96, 0xeb,
-	0xa2, 0xe4, 0x3a, 0x90, 0xb3, 0x56, 0x4c, 0x80, 0x3e, 0x02, 0x14, 0xda, 0xc1, 0x08, 0x87, 0x5d,
-	0x56, 0x13, 0x0b, 0x34, 0x37, 0xd8, 0x41, 0x1a, 0x7c, 0x85, 0x6a, 0x78, 0xc0, 0xa1, 0xfc, 0x16,
-	0xac, 0xa9, 0xd4, 0xdc, 0xd2, 0x55, 0xde, 0x2d, 0xc4, 0xc4, 0xdc, 0x1d, 0xef, 0x41, 0x9d, 0x82,
-	0x0a, 0x0e, 0xba, 0x01, 0xee, 0x7b, 0xc1, 0x80, 0xf6, 0x5f, 0x94, 0x70, 0x85, 0xcf, 0x5a, 0x7c,
-	0x12, 0x7d, 0x06, 0xab, 0x9e, 0x34, 0x67, 0x97, 0x9b, 0x91, 0x17, 0xd2, 0x17, 0xf8, 0x5d, 0x92,
-	0x30, 0xb5, 0x55, 0xf7, 0x12, 0xdf, 0xbc, 0xd0, 0x12, 0xdd, 0xf4, 0xaf, 0x35, 0x58, 0x89, 0x0c,
-	0x4e, 0x85, 0xa7, 0x22, 0x42, 0x4b, 0x45, 0x04, 0xba, 0x0a, 0x35, 0x5e, 0x49, 0x76, 0x59, 0x69,
-	0xcc, 0x43, 0x1d, 0xf8, 0xd4, 0x97, 0x36, 0x19, 0xe7, 0xe9, 0x56, 0x3c, 0xb3, 0x6e, 0xe6, 0x9f,
-	0x35, 0x25, 0x00, 0xf8, 0x61, 0xd7, 0xa1, 0x44, 0x7c, 0x57, 0x00, 0x83, 0x61, 0xf1, 0x0f, 0xf4,
-	0x11, 0x54, 0xa4, 0x89, 0x78, 0x32, 0x23, 0x26, 0x3e, 0xc1, 0x6b, 0x49, 0x12, 0xea, 0xfd, 0xd0,
-	0x9b, 0xf4, 0x48, 0xe8, 0x4d, 0xb1, 0xa8, 0xc1, 0xe2, 0x09, 0x74, 0x0b, 0xca, 0xdc, 0xbe, 0xa2,
-	0x15, 0xcd, 0x13, 0x25, 0x28, 0x28, 0xed, 0xd0, 0xf3, 0x68, 0x98, 0x94, 0xe6, 0xd3, 0x72, 0x0a,
-	0xd3, 0x81, 0xd5, 0x7d, 0xcf, 0x3f, 0x51, 0xa3, 0xf9, 0x12, 0x14, 0x49, 0xd0, 0xcf, 0x06, 0x33,
-	0x9d, 0xa5, 0x8b, 0x03, 0x22, 0x9b, 0x74, 0x75, 0x71, 0x40, 0x42, 0x7a, 0x84, 0xc8, 0x56, 0xf2,
-	0x08, 0xd1, 0x84, 0x52, 0x36, 0x9f, 0x3d, 0x77, 0xcc, 0x5f, 0xf0, 0xb2, 0xf9, 0x1c, 0xd9, 0x86,
-	0x40, 0x1f, 0xce, 0x5c, 0x57, 0x20, 0x3a, 0x1b, 0xa3, 0x26, 0x54, 0xc6, 0x0e, 0x09, 0xbd, 0xe0,
-	0x44, 0xe0, 0x87, 0xfc, 0x34, 0xb7, 0x61, 0xf5, 0xa7, 0xb6, 0xfb, 0xf2, 0x1c, 0x1a, 0xbd, 0x80,
-	0xd5, 0xc7, 0xae, 0xd7, 0x53, 0x39, 0xce, 0x54, 0xbc, 0x34, 0xa1, 0xe2, 0xdb, 0x61, 0x88, 0x03,
-	0x59, 0xb5, 0xc9, 0x4f, 0xda, 0xaf, 0xc9, 0x1e, 0x97, 0x44, 0x5d, 0x6c, 0xa6, 0xf4, 0x97, 0x24,
-	0xbc, 0x8b, 0x65, 0x05, 0xc1, 0x31, 0xac, 0x1e, 0x38, 0xc3, 0xa1, 0xaa, 0xca, 0x0d, 0x30, 0xa6,
-	0xf8, 0xb8, 0x9b, 0x7f, 0x80, 0xca, 0x14, 0x1f, 0xb3, 0x17, 0xc3, 0x1b, 0x60, 0x78, 0xee, 0x80,
-	0x53, 0x65, 0x5c, 0x59, 0xf1, 0xdc, 0x01, 0xa3, 0x6a, 0x42, 0x85, 0x8c, 0x6d, 0xd7, 0xf5, 0x8e,
-	0x85, 0x33, 0xe5, 0xa7, 0xf9, 0x0d, 0x34, 0xe2, 0x8d, 0xe3, 0x9e, 0x45, 0xee, 0x4c, 0xe6, 0x28,
-	0x2e, 0xb6, 0x67, 0x87, 0x94, 0xfb, 0xcb, 0xdc, 0x48, 0xd3, 0x0a, 0x25, 0x08, 0x2d, 0x09, 0xf8,
-	0x65, 0x7c, 0x0e, 0x1f, 0x8d, 0xa1, 0xf1, 0x62, 0x16, 0x8a, 0x7a, 0x55, 0xb0, 0x44, 0x28, 0xac,
-	0xa9, 0x28, 0xfc, 0x0e, 0xe8, 0xa1, 0x3d, 0x92, 0x4a, 0x18, 0x4c, 0xd0, 0x91, 0x3d, 0xb2, 0xd8,
-	0x6c, 0xdc, 0x04, 0x17, 0xe7, 0x34, 0xc1, 0xe6, 0x6f, 0x34, 0x58, 0x7b, 0x8c, 0xc5, 0x56, 0x44,
-	0xb9, 0xee, 0x65, 0xa7, 0xaf, 0x9d, 0xd2, 0xe9, 0xe7, 0x5d, 0x7e, 0xfa, 0xa2, 0xcb, 0x2f, 0x51,
-	0x64, 0x5f, 0x06, 0x08, 0xbd, 0xd0, 0x76, 0xbb, 0x74, 0x4a, 0xd4, 0x9b, 0x55, 0x36, 0xd3, 0x71,
-	0xbe, 0xc7, 0xb4, 0x7f, 0x6b, 0x3c, 0xc6, 0x21, 0xd3, 0x38, 0x52, 0x2e, 0xf1, 0xbe, 0xa0, 0x2d,
-	0x78, 0x5f, 0xf8, 0x9f, 0xab, 0xf8, 0x13, 0x68, 0x1c, 0xd9, 0xa3, 0xa4, 0xab, 0xce, 0xf4, 0x4a,
-	0x70, 0xaa, 0xe7, 0xcc, 0x75, 0x40, 0x14, 0x37, 0x92, 0x7e, 0xa1, 0xb9, 0x4b, 0x67, 0x8f, 0xec,
-	0x51, 0x64, 0x8d, 0x0d, 0x28, 0xfb, 0x01, 0x1e, 0x3a, 0xdf, 0x89, 0x37, 0x6c, 0xf1, 0x45, 0xaf,
-	0x39, 0x67, 0xda, 0x77, 0x67, 0x03, 0xdc, 0x15, 0xba, 0x70, 0x40, 0x59, 0x11, 0xb3, 0x5c, 0xb2,
-	0xd9, 0xe1, 0xdd, 0x3b, 0x97, 0x28, 0x32, 0xa1, 0x05, 0xc5, 0xd0, 0x1e, 0x09, 0xdd, 0x63, 0xc5,
-	0xe8, 0xa4, 0x72, 0xb4, 0xc2, 0xdc, 0xa3, 0x99, 0x9f, 0xc3, 0x3a, 0x0f, 0xf9, 0x37, 0x0a, 0x2b,
-	0xf3, 0x22, 0xbc, 0x95, 0x62, 0xe7, 0x8a, 0x99, 0x9f, 0xc8, 0x54, 0x52, 0x0d, 0x20, 0xed, 0xa8,
-	0xcd, 0xb3, 0xa3, 0xca, 0x22, 0x04, 0xdd, 0x03, 0xb4, 0x3f, 0xc6, 0xfd, 0x97, 0xe7, 0x77, 0x9b,
-	0xf9, 0x31, 0x5c, 0x48, 0xb0, 0x0a, 0x9b, 0x6d, 0x40, 0x19, 0x7f, 0xe7, 0x90, 0x90, 0x88, 0x2b,
-	0x54, 0x7c, 0x99, 0xdb, 0x50, 0x11, 0xa7, 0x38, 0xeb, 0xe9, 0x7f, 0x59, 0x80, 0x9a, 0x7c, 0x71,
-	0xa2, 0x55, 0xdc, 0x9d, 0x34, 0xdb, 0x65, 0x85, 0x8d, 0x91, 0x88, 0x31, 0x39, 0x9c, 0x86, 0xc1,
-	0x49, 0x9c, 0x9d, 0x9b, 0x89, 0x00, 0x6b, 0x65, 0xb8, 0xa8, 0x45, 0x38, 0x0b, 0xa3, 0x6b, 0xb5,
-	0x61, 0x59, 0x15, 0x44, 0x0b, 0xbc, 0x97, 0xf8, 0x44, 0x84, 0x15, 0x1d, 0xa2, 0xeb, 0x6a, 0xe1,
-	0x99, 0xc9, 0x3a, 0xbe, 0x76, 0xbf, 0x70, 0x57, 0x6b, 0x1d, 0x40, 0x35, 0x92, 0x9e, 0x23, 0xe7,
-	0xdd, 0xa4, 0x9c, 0x64, 0x07, 0x1f, 0x49, 0xb9, 0xf5, 0x21, 0x7f, 0x3b, 0x65, 0x0f, 0x9e, 0xcb,
-	0x60, 0x58, 0x87, 0x9d, 0x43, 0xeb, 0xab, 0xc3, 0x83, 0xc6, 0x12, 0x32, 0x40, 0x7f, 0xd4, 0x7e,
-	0x7a, 0xd8, 0xd0, 0x50, 0x05, 0x8a, 0x07, 0x6d, 0xab, 0x51, 0xb8, 0x75, 0x5b, 0x76, 0xa7, 0xac,
-	0x9e, 0x47, 0x35, 0xa8, 0x74, 0x8e, 0x1e, 0x5a, 0x47, 0x8c, 0xbc, 0x0a, 0x25, 0xeb, 0xf0, 0xe1,
-	0xc1, 0xcf, 0x1a, 0x1a, 0x95, 0xf3, 0xa8, 0xfd, 0xac, 0xdd, 0xf9, 0xf2, 0xf0, 0xa0, 0x51, 0xb8,
-	0xf5, 0x00, 0xaa, 0x51, 0xf5, 0x49, 0x85, 0x3e, 0x7b, 0xfe, 0xec, 0x90, 0x8b, 0x7f, 0xd2, 0x79,
-	0xfe, 0xac, 0xa1, 0xd1, 0xd1, 0xd3, 0xf6, 0xb3, 0xc3, 0x46, 0x81, 0x6e, 0xd4, 0xf9, 0xf1, 0xd3,
-	0x46, 0x91, 0x0e, 0xf6, 0x3b, 0x5f, 0x35, 0xf4, 0x9d, 0xdf, 0xd7, 0xa1, 0xf8, 0xf0, 0x45, 0x1b,
-	0x7d, 0x01, 0x10, 0x3f, 0xe1, 0xa1, 0x0d, 0x7e, 0x77, 0xa6, 0xdf, 0xf4, 0x5a, 0x1b, 0x99, 0xf7,
-	0xd7, 0x43, 0xf6, 0xa0, 0xb0, 0x84, 0xee, 0x40, 0x4d, 0x79, 0x8e, 0x43, 0x17, 0x99, 0x80, 0xec,
-	0x03, 0x5d, 0x2b, 0xf9, 0x82, 0x66, 0x2e, 0xa1, 0x7b, 0x60, 0xc8, 0x97, 0x37, 0xb4, 0xce, 0x16,
-	0x53, 0x2f, 0x74, 0xad, 0xb7, 0x52, 0xb3, 0x22, 0xfc, 0x97, 0xa8, 0xce, 0xf1, 0xa3, 0x9b, 0xd0,
-	0x39, 0xf3, 0x0a, 0x77, 0x8a, 0xce, 0x9f, 0x42, 0x4d, 0x79, 0x57, 0x13, 0x3a, 0x67, 0x5f, 0xda,
-	0x5a, 0x6a, 0x25, 0x61, 0x2e, 0xa1, 0x3d, 0x58, 0x56, 0x5f, 0x8e, 0x50, 0x53, 0x5c, 0x7c, 0x99,
-	0xc7, 0xa4, 0x53, 0xb6, 0xfe, 0x1c, 0x56, 0x12, 0x2f, 0x30, 0xe8, 0x6d, 0xd5, 0x60, 0x49, 0x29,
-	0xe9, 0xe7, 0x08, 0x73, 0x09, 0xdd, 0x05, 0x88, 0xdf, 0x53, 0xc4, 0xc9, 0x33, 0x0f, 0x2c, 0xad,
-	0x46, 0x8a, 0x91, 0x98, 0x4b, 0x68, 0x97, 0x43, 0xa5, 0x8c, 0xb2, 0x00, 0xdb, 0x93, 0xb9, 0xfc,
-	0xd9, 0x8d, 0xb7, 0x35, 0x7a, 0x7a, 0xb5, 0x2d, 0x17, 0xa7, 0xcf, 0xe9, 0xd4, 0x4f, 0x39, 0xfd,
-	0x03, 0xa8, 0x29, 0xed, 0xb9, 0x30, 0x7c, 0xb6, 0x61, 0xcf, 0x57, 0x60, 0x1f, 0x56, 0x53, 0x7d,
-	0x37, 0xba, 0xc4, 0x3d, 0x97, 0xdb, 0x8d, 0xe7, 0x0b, 0xf9, 0x14, 0x6a, 0xca, 0x7b, 0xa5, 0xd0,
-	0x20, 0xfb, 0x82, 0x99, 0xe3, 0x7a, 0xf5, 0xed, 0x47, 0x1c, 0x3e, 0xe7, 0x39, 0xe8, 0x4c, 0xae,
-	0x17, 0x42, 0x12, 0xae, 0x4f, 0x4a, 0x49, 0xff, 0xcb, 0x73, 0xec, 0x7a, 0xc1, 0x1b, 0xbb, 0x2e,
-	0xc9, 0xd8, 0x48, 0x31, 0x12, 0xae, 0xbc, 0xfa, 0x44, 0x93, 0xf0, 0xdc, 0x59, 0x95, 0xbf, 0x0f,
-	0x15, 0xd1, 0xc2, 0xa0, 0x0b, 0xc9, 0x86, 0x66, 0x01, 0xe7, 0x4d, 0x0d, 0xdd, 0x07, 0x43, 0x76,
-	0x39, 0x22, 0xd3, 0x53, 0x4d, 0xcf, 0x29, 0xfb, 0xee, 0x42, 0x45, 0xbc, 0x2f, 0x88, 0x7d, 0x93,
-	0x0f, 0x1c, 0xad, 0x4b, 0x19, 0x4e, 0x56, 0xf7, 0x7c, 0xc5, 0x1e, 0x15, 0xa8, 0xc3, 0xef, 0x81,
-	0x21, 0x58, 0x48, 0xbe, 0x84, 0xf5, 0xe4, 0xa4, 0x04, 0x99, 0x6d, 0x4d, 0x81, 0x36, 0xb6, 0x7f,
-	0x02, 0xda, 0x54, 0x09, 0xc9, 0xe2, 0xd9, 0x5c, 0x42, 0x3b, 0x1c, 0xda, 0x94, 0x03, 0xa7, 0xba,
-	0xa8, 0x56, 0x3d, 0xc1, 0x42, 0x18, 0x1c, 0xd6, 0x25, 0x91, 0xc8, 0xce, 0x7c, 0xce, 0xf4, 0x66,
-	0xdb, 0x1a, 0xba, 0x0d, 0x86, 0xec, 0xa2, 0x04, 0x53, 0xaa, 0xa9, 0xca, 0x63, 0xda, 0x01, 0x43,
-	0x36, 0x52, 0x82, 0x29, 0xd5, 0x57, 0xe5, 0xeb, 0x28, 0x89, 0x12, 0x3a, 0xa6, 0x39, 0x73, 0xb6,
-	0xbb, 0x07, 0x86, 0xec, 0x59, 0x04, 0x53, 0xaa, 0x77, 0x12, 0x68, 0x9f, 0x6e, 0x6c, 0x54, 0xb4,
-	0x67, 0xcc, 0x2a, 0xda, 0x9f, 0x2d, 0x84, 0x3e, 0x67, 0xd7, 0x24, 0x0e, 0xf1, 0x43, 0xd7, 0x45,
-	0x73, 0xc8, 0xe6, 0xb3, 0xef, 0xfc, 0xb5, 0x02, 0x55, 0x7e, 0xbb, 0xd3, 0xeb, 0xf2, 0x36, 0x54,
-	0xa3, 0xde, 0x06, 0xbd, 0x25, 0x33, 0x21, 0x51, 0x89, 0xb5, 0xd4, 0x8a, 0x80, 0x25, 0xc0, 0x3d,
-	0xf6, 0x64, 0xc1, 0x27, 0x3a, 0xec, 0x71, 0x62, 0x0e, 0xe7, 0xb2, 0xc2, 0x49, 0x18, 0xeb, 0x2e,
-	0x40, 0x44, 0x45, 0xe6, 0xb1, 0x9d, 0x96, 0x7c, 0xf7, 0xa0, 0x1a, 0x75, 0x48, 0x48, 0xd5, 0x6c,
-	0x71, 0xea, 0x1c, 0x02, 0xc4, 0xcd, 0x95, 0x30, 0x7c, 0xa6, 0xdb, 0x5a, 0x2c, 0x66, 0x9f, 0x69,
-	0xc0, 0xbb, 0x20, 0x71, 0x82, 0x74, 0x57, 0xb4, 0x58, 0xc8, 0x67, 0xac, 0x26, 0x4b, 0xd8, 0x3d,
-	0xdd, 0xb8, 0x9c, 0x12, 0x02, 0x5b, 0x11, 0xf4, 0xe6, 0x19, 0x62, 0x35, 0x51, 0x5c, 0xb2, 0x0c,
-	0xde, 0x83, 0x9a, 0x52, 0x27, 0x8b, 0xd4, 0xcf, 0x16, 0xdd, 0xad, 0x66, 0x76, 0x21, 0x8a, 0xdb,
-	0x3b, 0x50, 0x53, 0x9a, 0x20, 0x21, 0x23, 0xdb, 0x16, 0xa5, 0xc2, 0x65, 0x5b, 0x43, 0x5f, 0xc2,
-	0x4a, 0xa2, 0x83, 0x10, 0x17, 0x45, 0x5e, 0x53, 0xd2, 0x6a, 0xe5, 0x2d, 0x45, 0x2a, 0xdc, 0x86,
-	0xf2, 0x63, 0x4c, 0xdb, 0x23, 0x14, 0x75, 0x16, 0x8b, 0x4d, 0xfd, 0x01, 0x80, 0x30, 0x56, 0x92,
-	0x31, 0xc7, 0x4c, 0x0f, 0x38, 0xd0, 0xd1, 0x6a, 0x59, 0x81, 0x2b, 0xa5, 0xbf, 0x51, 0x6a, 0xb8,
-	0x44, 0x0b, 0x43, 0xf7, 0xd9, 0x95, 0x79, 0xcd, 0xd8, 0xd5, 0xbc, 0x56, 0x05, 0x5c, 0xcc, 0xcc,
-	0x47, 0xa7, 0x7b, 0x00, 0x95, 0x7d, 0x6f, 0xe2, 0xdb, 0xfd, 0xf0, 0xfc, 0x69, 0xbd, 0xb7, 0xfb,
-	0xa7, 0xd7, 0x57, 0xb4, 0xbf, 0xbc, 0xbe, 0xa2, 0xfd, 0xfd, 0xf5, 0x15, 0xed, 0x87, 0x7f, 0x5c,
-	0x59, 0xfa, 0xfa, 0xe3, 0x91, 0x13, 0x8e, 0x67, 0xbd, 0xcd, 0xbe, 0x37, 0xd9, 0xf2, 0xed, 0xfe,
-	0xf8, 0x64, 0x80, 0x03, 0x75, 0x44, 0x82, 0xfe, 0x56, 0xfc, 0x3f, 0x06, 0x7b, 0x65, 0x26, 0xf2,
-	0xf6, 0x7f, 0x03, 0x00, 0x00, 0xff, 0xff, 0x75, 0x3c, 0x6f, 0x35, 0x46, 0x28, 0x00, 0x00,
+	0x5a, 0xb0, 0x1a, 0x6d, 0x29, 0xae, 0xcf, 0x0f, 0x80, 0x55, 0x7a, 0x6d, 0x9e, 0x57, 0x71, 0xfd,
+	0x20, 0x2b, 0x49, 0x2b, 0x5a, 0xa6, 0x01, 0xf0, 0xca, 0x76, 0x67, 0x3c, 0x00, 0x96, 0x2d, 0xfe,
+	0x61, 0xbe, 0x0f, 0xf5, 0xe7, 0xaf, 0x70, 0x70, 0x1c, 0x38, 0x21, 0x6e, 0x4f, 0x07, 0xf8, 0x3b,
+	0x4a, 0xe7, 0xd0, 0x01, 0x93, 0x57, 0xb4, 0xf8, 0x87, 0xf9, 0xcf, 0x02, 0xd4, 0x5f, 0xcc, 0xce,
+	0x73, 0xde, 0x68, 0xbf, 0xa2, 0xb2, 0x1f, 0xbd, 0x79, 0x67, 0x81, 0x2b, 0xee, 0x08, 0x3a, 0x44,
+	0xef, 0xd0, 0x0a, 0xa0, 0x3f, 0x0b, 0x88, 0xf3, 0x0a, 0x33, 0x6c, 0x35, 0xac, 0x78, 0x02, 0x7d,
+	0x04, 0xd5, 0x01, 0x76, 0x9d, 0x89, 0x13, 0xe2, 0x80, 0x41, 0x74, 0x5d, 0x94, 0x5f, 0x07, 0x72,
+	0xd6, 0x8a, 0x09, 0xd0, 0x47, 0x80, 0x42, 0x3b, 0x18, 0xe1, 0xb0, 0xcb, 0xea, 0x63, 0x81, 0xec,
+	0x06, 0x3b, 0x48, 0x83, 0xaf, 0x50, 0x0d, 0x0f, 0x38, 0xac, 0xdf, 0x82, 0x35, 0x95, 0x9a, 0x5b,
+	0xbd, 0xca, 0x3b, 0x87, 0x98, 0x98, 0xbb, 0xe6, 0x3d, 0xa8, 0x53, 0x80, 0xc1, 0x41, 0x37, 0xc0,
+	0x7d, 0x2f, 0x18, 0xd0, 0x5e, 0x8c, 0x12, 0xae, 0xf0, 0x59, 0x8b, 0x4f, 0xa2, 0xcf, 0x60, 0xd5,
+	0x93, 0xe6, 0xec, 0x72, 0x33, 0xf2, 0xa2, 0xfa, 0x02, 0xbf, 0x57, 0x12, 0xa6, 0xb6, 0xea, 0x5e,
+	0xe2, 0x9b, 0x17, 0x5d, 0xa2, 0xb3, 0xfe, 0xb5, 0x06, 0x2b, 0x91, 0xc1, 0xa9, 0xf0, 0x54, 0x74,
+	0x68, 0xa9, 0xe8, 0x40, 0x57, 0xa1, 0xc6, 0xab, 0xca, 0x2e, 0x2b, 0x93, 0x79, 0xd8, 0x03, 0x9f,
+	0xfa, 0xd2, 0x26, 0xe3, 0x3c, 0xdd, 0x8a, 0x67, 0xd6, 0xcd, 0xfc, 0xb3, 0xa6, 0x04, 0x00, 0x3f,
+	0xec, 0x3a, 0x94, 0x88, 0xef, 0x0a, 0x90, 0x30, 0x2c, 0xfe, 0x81, 0x3e, 0x82, 0x8a, 0x34, 0x11,
+	0x4f, 0x6c, 0xc4, 0xc4, 0x27, 0x78, 0x2d, 0x49, 0x42, 0xbd, 0x1f, 0x7a, 0x93, 0x1e, 0x09, 0xbd,
+	0x29, 0x16, 0xf5, 0x58, 0x3c, 0x81, 0x6e, 0x41, 0x99, 0xdb, 0x57, 0xb4, 0xa5, 0x79, 0xa2, 0x04,
+	0x05, 0xa5, 0x1d, 0x7a, 0x1e, 0x0d, 0x93, 0xd2, 0x7c, 0x5a, 0x4e, 0x61, 0x3a, 0xb0, 0xba, 0xef,
+	0xf9, 0x27, 0x6a, 0x34, 0x5f, 0x82, 0x22, 0x09, 0xfa, 0xd9, 0x60, 0xa6, 0xb3, 0x74, 0x71, 0x40,
+	0x64, 0xc3, 0xae, 0x2e, 0x0e, 0x48, 0x48, 0x8f, 0x10, 0xd9, 0x4a, 0x1e, 0x21, 0x9a, 0x50, 0x4a,
+	0xe8, 0xb3, 0xe7, 0x8e, 0xf9, 0x0b, 0x5e, 0x42, 0x9f, 0x23, 0xdb, 0x10, 0xe8, 0xc3, 0x99, 0xeb,
+	0x0a, 0x74, 0x67, 0x63, 0xd4, 0x84, 0xca, 0xd8, 0x21, 0xa1, 0x17, 0x9c, 0x08, 0x2c, 0x91, 0x9f,
+	0xe6, 0x36, 0xac, 0xfe, 0xd4, 0x76, 0x5f, 0x9e, 0x43, 0xa3, 0x17, 0xb0, 0xfa, 0xd8, 0xf5, 0x7a,
+	0x2a, 0xc7, 0x99, 0x0a, 0x99, 0x26, 0x54, 0x7c, 0x3b, 0x0c, 0x71, 0x20, 0x2b, 0x38, 0xf9, 0x49,
+	0x7b, 0x37, 0x89, 0x52, 0x24, 0xea, 0x68, 0x33, 0x6d, 0x40, 0x16, 0xc8, 0xcc, 0x63, 0x58, 0x3d,
+	0x70, 0x86, 0x43, 0x55, 0x95, 0x1b, 0x60, 0x4c, 0xf1, 0x71, 0x37, 0xff, 0x00, 0x95, 0x29, 0x3e,
+	0x66, 0xaf, 0x87, 0x37, 0xc0, 0xf0, 0xdc, 0x01, 0xa7, 0xca, 0xb8, 0xb2, 0xe2, 0xb9, 0x03, 0x46,
+	0xd5, 0x84, 0x0a, 0x19, 0xdb, 0xae, 0xeb, 0x1d, 0x0b, 0x67, 0xca, 0x4f, 0xf3, 0x1b, 0x68, 0xc4,
+	0x1b, 0xc7, 0xfd, 0x8b, 0xdc, 0x99, 0xcc, 0x51, 0x5c, 0x6c, 0xcf, 0x0e, 0x29, 0xf7, 0x97, 0xb9,
+	0x91, 0xa6, 0x15, 0x4a, 0x10, 0x5a, 0x1e, 0xf0, 0x8b, 0xf9, 0x1c, 0x3e, 0x1a, 0x43, 0xe3, 0xc5,
+	0x2c, 0x14, 0xb5, 0xab, 0x60, 0x89, 0x50, 0x58, 0x53, 0x51, 0xf8, 0x1d, 0xd0, 0x43, 0x7b, 0x24,
+	0x95, 0x30, 0x98, 0xa0, 0x23, 0x7b, 0x64, 0xb1, 0xd9, 0xb8, 0x21, 0x2e, 0xce, 0x69, 0x88, 0xcd,
+	0xdf, 0x68, 0xb0, 0xf6, 0x18, 0x8b, 0xad, 0x88, 0x72, 0xf5, 0xcb, 0xae, 0x5f, 0x3b, 0xa5, 0xeb,
+	0xcf, 0xbb, 0x08, 0xf5, 0x45, 0x17, 0x61, 0xa2, 0xe0, 0xbe, 0x0c, 0x10, 0x7a, 0xa1, 0xed, 0x76,
+	0xe9, 0x94, 0xa8, 0x3d, 0xab, 0x6c, 0xa6, 0xe3, 0x7c, 0x8f, 0x69, 0x2f, 0xd7, 0x78, 0x8c, 0x43,
+	0xa6, 0x71, 0xa4, 0x5c, 0xe2, 0xad, 0x41, 0x5b, 0xf0, 0xd6, 0xf0, 0x3f, 0x57, 0xf1, 0x27, 0xd0,
+	0x38, 0xb2, 0x47, 0x49, 0x57, 0x9d, 0xe9, 0xc5, 0xe0, 0x54, 0xcf, 0x99, 0xeb, 0x80, 0x28, 0x6e,
+	0x24, 0xfd, 0x42, 0x73, 0x97, 0xce, 0x1e, 0xd9, 0xa3, 0xc8, 0x1a, 0x1b, 0x50, 0xf6, 0x03, 0x3c,
+	0x74, 0xbe, 0x13, 0xef, 0xd9, 0xe2, 0x8b, 0x5e, 0x73, 0xce, 0xb4, 0xef, 0xce, 0x06, 0xb8, 0x2b,
+	0x74, 0xe1, 0x80, 0xb2, 0x22, 0x66, 0xb9, 0x64, 0xb3, 0xc3, 0x3b, 0x79, 0x2e, 0x51, 0x64, 0x42,
+	0x0b, 0x8a, 0xa1, 0x3d, 0x12, 0xba, 0xc7, 0x8a, 0xd1, 0x49, 0xe5, 0x68, 0x85, 0xb9, 0x47, 0x33,
+	0x3f, 0x87, 0x75, 0x1e, 0xf2, 0x6f, 0x14, 0x56, 0xe6, 0x45, 0x78, 0x2b, 0xc5, 0xce, 0x15, 0x33,
+	0x3f, 0x91, 0xa9, 0xa4, 0x1a, 0x40, 0xda, 0x51, 0x9b, 0x67, 0x47, 0x95, 0x45, 0x08, 0xba, 0x07,
+	0x68, 0x7f, 0x8c, 0xfb, 0x2f, 0xcf, 0xef, 0x36, 0xf3, 0x63, 0xb8, 0x90, 0x60, 0x15, 0x36, 0xdb,
+	0x80, 0x32, 0xfe, 0xce, 0x21, 0x21, 0x11, 0x57, 0xa8, 0xf8, 0x32, 0xb7, 0xa1, 0x22, 0x4e, 0x71,
+	0xd6, 0xd3, 0xff, 0xb2, 0x00, 0x35, 0xf9, 0xfa, 0x44, 0xab, 0xb8, 0x3b, 0x69, 0xb6, 0xcb, 0x0a,
+	0x1b, 0x23, 0x11, 0x63, 0x72, 0x38, 0x0d, 0x83, 0x93, 0x38, 0x3b, 0x37, 0x13, 0x01, 0xd6, 0xca,
+	0x70, 0x51, 0x8b, 0x70, 0x16, 0x46, 0xd7, 0x6a, 0xc3, 0xb2, 0x2a, 0x88, 0x16, 0x78, 0x2f, 0xf1,
+	0x89, 0x08, 0x2b, 0x3a, 0x44, 0xd7, 0xd5, 0xc2, 0x33, 0x93, 0x75, 0x7c, 0xed, 0x7e, 0xe1, 0xae,
+	0xd6, 0x3a, 0x80, 0x6a, 0x24, 0x3d, 0x47, 0xce, 0xbb, 0x49, 0x39, 0xc9, 0x6e, 0x3e, 0x92, 0x72,
+	0xeb, 0x43, 0xfe, 0x8e, 0xca, 0x1e, 0x3f, 0x97, 0xc1, 0xb0, 0x0e, 0x3b, 0x87, 0xd6, 0x57, 0x87,
+	0x07, 0x8d, 0x25, 0x64, 0x80, 0xfe, 0xa8, 0xfd, 0xf4, 0xb0, 0xa1, 0xa1, 0x0a, 0x14, 0x0f, 0xda,
+	0x56, 0xa3, 0x70, 0xeb, 0xb6, 0xec, 0x54, 0x59, 0x6d, 0x8f, 0x6a, 0x50, 0xe9, 0x1c, 0x3d, 0xb4,
+	0x8e, 0x18, 0x79, 0x15, 0x4a, 0xd6, 0xe1, 0xc3, 0x83, 0x9f, 0x35, 0x34, 0x2a, 0xe7, 0x51, 0xfb,
+	0x59, 0xbb, 0xf3, 0xe5, 0xe1, 0x41, 0xa3, 0x70, 0xeb, 0x01, 0x54, 0xa3, 0xea, 0x93, 0x0a, 0x7d,
+	0xf6, 0xfc, 0xd9, 0x21, 0x17, 0xff, 0xa4, 0xf3, 0xfc, 0x59, 0x43, 0xa3, 0xa3, 0xa7, 0xed, 0x67,
+	0x87, 0x8d, 0x02, 0xdd, 0xa8, 0xf3, 0xe3, 0xa7, 0x8d, 0x22, 0x1d, 0xec, 0x77, 0xbe, 0x6a, 0xe8,
+	0x3b, 0xbf, 0xaf, 0x43, 0xf1, 0xe1, 0x8b, 0x36, 0xfa, 0x02, 0x20, 0x7e, 0xce, 0x43, 0x1b, 0xfc,
+	0xee, 0x4c, 0xbf, 0xef, 0xb5, 0x36, 0x32, 0x6f, 0xb1, 0x87, 0xec, 0x71, 0x61, 0x09, 0xdd, 0x81,
+	0x9a, 0xf2, 0x34, 0x87, 0x2e, 0x32, 0x01, 0xd9, 0xc7, 0xba, 0x56, 0xf2, 0x35, 0xcd, 0x5c, 0x42,
+	0xf7, 0xc0, 0x90, 0xaf, 0x70, 0x68, 0x9d, 0x2d, 0xa6, 0x5e, 0xeb, 0x5a, 0x6f, 0xa5, 0x66, 0x45,
+	0xf8, 0x2f, 0x51, 0x9d, 0xe3, 0x07, 0x38, 0xa1, 0x73, 0xe6, 0x45, 0xee, 0x14, 0x9d, 0x3f, 0x85,
+	0x9a, 0xf2, 0xc6, 0x26, 0x74, 0xce, 0xbe, 0xba, 0xb5, 0xd4, 0x4a, 0xc2, 0x5c, 0x42, 0x7b, 0xb0,
+	0xac, 0xbe, 0x22, 0xa1, 0xa6, 0xb8, 0xf8, 0x32, 0x0f, 0x4b, 0xa7, 0x6c, 0xfd, 0x39, 0xac, 0x24,
+	0x5e, 0x63, 0xd0, 0xdb, 0xaa, 0xc1, 0x92, 0x52, 0xd2, 0x4f, 0x13, 0xe6, 0x12, 0xba, 0x0b, 0x10,
+	0xbf, 0xad, 0x88, 0x93, 0x67, 0x1e, 0x5b, 0x5a, 0x8d, 0x14, 0x23, 0x31, 0x97, 0xd0, 0x2e, 0x87,
+	0x4a, 0x19, 0x65, 0x01, 0xb6, 0x27, 0x73, 0xf9, 0xb3, 0x1b, 0x6f, 0x6b, 0xf4, 0xf4, 0x6a, 0x8b,
+	0x2e, 0x4e, 0x9f, 0xd3, 0xb5, 0x9f, 0x72, 0xfa, 0x07, 0x50, 0x53, 0x5a, 0x75, 0x61, 0xf8, 0x6c,
+	0xf3, 0x9e, 0xaf, 0xc0, 0x3e, 0xac, 0xa6, 0x7a, 0x70, 0x74, 0x89, 0x7b, 0x2e, 0xb7, 0x33, 0xcf,
+	0x17, 0xf2, 0x29, 0xd4, 0x94, 0xb7, 0x4b, 0xa1, 0x41, 0xf6, 0x35, 0x33, 0xc7, 0xf5, 0xea, 0x3b,
+	0x90, 0x38, 0x7c, 0xce, 0xd3, 0xd0, 0x99, 0x5c, 0x2f, 0x84, 0x24, 0x5c, 0x9f, 0x94, 0x92, 0xfe,
+	0x57, 0xe8, 0xd8, 0xf5, 0x82, 0x37, 0x76, 0x5d, 0x92, 0xb1, 0x91, 0x62, 0x24, 0x5c, 0x79, 0xf5,
+	0xb9, 0x26, 0xe1, 0xb9, 0xb3, 0x2a, 0x7f, 0x1f, 0x2a, 0xa2, 0x85, 0x41, 0x17, 0x92, 0x0d, 0xcd,
+	0x02, 0xce, 0x9b, 0x1a, 0xba, 0x0f, 0x86, 0xec, 0x72, 0x44, 0xa6, 0xa7, 0x9a, 0x9e, 0x53, 0xf6,
+	0xdd, 0x85, 0x8a, 0x78, 0x6b, 0x10, 0xfb, 0x26, 0x1f, 0x3b, 0x5a, 0x97, 0x32, 0x9c, 0xac, 0xee,
+	0xf9, 0x8a, 0x3d, 0x2a, 0x50, 0x87, 0xdf, 0x03, 0x43, 0xb0, 0x90, 0x7c, 0x09, 0xeb, 0xc9, 0x49,
+	0x09, 0x32, 0xdb, 0x9a, 0x02, 0x6d, 0x6c, 0xff, 0x04, 0xb4, 0xa9, 0x12, 0x92, 0xc5, 0xb3, 0xb9,
+	0x84, 0x76, 0x38, 0xb4, 0x29, 0x07, 0x4e, 0x75, 0x51, 0xad, 0x7a, 0x82, 0x85, 0x30, 0x38, 0xac,
+	0x4b, 0x22, 0x91, 0x9d, 0xf9, 0x9c, 0xe9, 0xcd, 0xb6, 0x35, 0x74, 0x1b, 0x0c, 0xd9, 0x45, 0x09,
+	0xa6, 0x54, 0x53, 0x95, 0xc7, 0xb4, 0x03, 0x86, 0x6c, 0xa4, 0x04, 0x53, 0xaa, 0xaf, 0xca, 0xd7,
+	0x51, 0x12, 0x25, 0x74, 0x4c, 0x73, 0xe6, 0x6c, 0x77, 0x0f, 0x0c, 0xd9, 0xb3, 0x08, 0xa6, 0x54,
+	0xef, 0x24, 0xd0, 0x3e, 0xdd, 0xd8, 0xa8, 0x68, 0xcf, 0x98, 0x55, 0xb4, 0x3f, 0x5b, 0x08, 0x7d,
+	0xce, 0xae, 0x49, 0x1c, 0xe2, 0x87, 0xae, 0x8b, 0xe6, 0x90, 0xcd, 0x67, 0xdf, 0xf9, 0x6b, 0x05,
+	0xaa, 0xfc, 0x76, 0xa7, 0xd7, 0xe5, 0x6d, 0xa8, 0x46, 0xbd, 0x0d, 0x7a, 0x4b, 0x66, 0x42, 0xa2,
+	0x12, 0x6b, 0xa9, 0x15, 0x01, 0x4b, 0x80, 0x7b, 0xec, 0xc9, 0x82, 0x4f, 0x74, 0xd8, 0xe3, 0xc4,
+	0x1c, 0xce, 0x65, 0x85, 0x93, 0x30, 0xd6, 0x5d, 0x80, 0x88, 0x8a, 0xcc, 0x63, 0x3b, 0x2d, 0xf9,
+	0xee, 0x41, 0x35, 0xea, 0x90, 0x90, 0xaa, 0xd9, 0xe2, 0xd4, 0x39, 0x04, 0x88, 0x9b, 0x2b, 0x61,
+	0xf8, 0x4c, 0xb7, 0xb5, 0x58, 0xcc, 0x3e, 0xd3, 0x80, 0x77, 0x41, 0xe2, 0x04, 0xe9, 0xae, 0x68,
+	0xb1, 0x90, 0xcf, 0x58, 0x4d, 0x96, 0xb0, 0x7b, 0xba, 0x71, 0x39, 0x25, 0x04, 0xb6, 0x22, 0xe8,
+	0xcd, 0x33, 0xc4, 0x6a, 0xa2, 0xb8, 0x64, 0x19, 0xbc, 0x07, 0x35, 0xa5, 0x4e, 0x16, 0xa9, 0x9f,
+	0x2d, 0xba, 0x5b, 0xcd, 0xec, 0x42, 0x14, 0xb7, 0x77, 0xa0, 0xa6, 0x34, 0x41, 0x42, 0x46, 0xb6,
+	0x2d, 0x4a, 0x85, 0xcb, 0xb6, 0x86, 0xbe, 0x84, 0x95, 0x44, 0x07, 0x21, 0x2e, 0x8a, 0xbc, 0xa6,
+	0xa4, 0xd5, 0xca, 0x5b, 0x8a, 0x54, 0xb8, 0x0d, 0xe5, 0xc7, 0x98, 0xb6, 0x47, 0x28, 0xea, 0x2c,
+	0x16, 0x9b, 0xfa, 0x03, 0x00, 0x61, 0xac, 0x24, 0x63, 0x8e, 0x99, 0x1e, 0x70, 0xa0, 0xa3, 0xd5,
+	0xb2, 0x02, 0x57, 0x4a, 0x7f, 0xa3, 0xd4, 0x70, 0x89, 0x16, 0x86, 0xee, 0xb3, 0x2b, 0xf3, 0x9a,
+	0xb1, 0xab, 0x79, 0xad, 0x0a, 0xb8, 0x98, 0x99, 0x8f, 0x4e, 0xf7, 0x00, 0x2a, 0xfb, 0xde, 0xc4,
+	0xb7, 0xfb, 0xe1, 0xf9, 0xd3, 0x7a, 0x6f, 0xf7, 0x4f, 0xaf, 0xaf, 0x68, 0x7f, 0x79, 0x7d, 0x45,
+	0xfb, 0xfb, 0xeb, 0x2b, 0xda, 0x0f, 0xff, 0xb8, 0xb2, 0xf4, 0xf5, 0xc7, 0x23, 0x27, 0x1c, 0xcf,
+	0x7a, 0x9b, 0x7d, 0x6f, 0xb2, 0xe5, 0xdb, 0xfd, 0xf1, 0xc9, 0x00, 0x07, 0xea, 0x88, 0x04, 0xfd,
+	0xad, 0xf8, 0x7f, 0x0f, 0xf6, 0xca, 0x4c, 0xe4, 0xed, 0xff, 0x06, 0x00, 0x00, 0xff, 0xff, 0x93,
+	0x0e, 0xe2, 0x91, 0x52, 0x28, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -8234,11 +8235,11 @@ func (m *GetFileResponse) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.File != nil {
+	if m.FileInfo != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintPfs(dAtA, i, uint64(m.File.Size()))
-		n45, err := m.File.MarshalTo(dAtA[i:])
+		i = encodeVarintPfs(dAtA, i, uint64(m.FileInfo.Size()))
+		n45, err := m.FileInfo.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -10285,8 +10286,8 @@ func (m *GetFileResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.File != nil {
-		l = m.File.Size()
+	if m.FileInfo != nil {
+		l = m.FileInfo.Size()
 		n += 1 + l + sovPfs(uint64(l))
 	}
 	l = len(m.Value)
@@ -10918,7 +10919,7 @@ func (m *Repo) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -10946,7 +10947,7 @@ func (m *Repo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -10956,6 +10957,9 @@ func (m *Repo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -10968,6 +10972,9 @@ func (m *Repo) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -10998,7 +11005,7 @@ func (m *Branch) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -11026,7 +11033,7 @@ func (m *Branch) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11035,6 +11042,9 @@ func (m *Branch) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -11059,7 +11069,7 @@ func (m *Branch) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11069,6 +11079,9 @@ func (m *Branch) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -11081,6 +11094,9 @@ func (m *Branch) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -11111,7 +11127,7 @@ func (m *BranchInfo) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -11139,7 +11155,7 @@ func (m *BranchInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11149,6 +11165,9 @@ func (m *BranchInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -11168,7 +11187,7 @@ func (m *BranchInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11177,6 +11196,9 @@ func (m *BranchInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -11201,7 +11223,7 @@ func (m *BranchInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11210,6 +11232,9 @@ func (m *BranchInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -11232,7 +11257,7 @@ func (m *BranchInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11241,6 +11266,9 @@ func (m *BranchInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -11265,7 +11293,7 @@ func (m *BranchInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11274,6 +11302,9 @@ func (m *BranchInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -11296,7 +11327,7 @@ func (m *BranchInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11305,6 +11336,9 @@ func (m *BranchInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -11320,6 +11354,9 @@ func (m *BranchInfo) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -11350,7 +11387,7 @@ func (m *BranchInfos) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -11378,7 +11415,7 @@ func (m *BranchInfos) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11387,6 +11424,9 @@ func (m *BranchInfos) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -11402,6 +11442,9 @@ func (m *BranchInfos) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -11432,7 +11475,7 @@ func (m *File) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -11460,7 +11503,7 @@ func (m *File) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11469,6 +11512,9 @@ func (m *File) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -11493,7 +11539,7 @@ func (m *File) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11503,6 +11549,9 @@ func (m *File) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -11515,6 +11564,9 @@ func (m *File) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -11545,7 +11597,7 @@ func (m *Block) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -11573,7 +11625,7 @@ func (m *Block) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11583,6 +11635,9 @@ func (m *Block) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -11595,6 +11650,9 @@ func (m *Block) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -11625,7 +11683,7 @@ func (m *Object) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -11653,7 +11711,7 @@ func (m *Object) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11663,6 +11721,9 @@ func (m *Object) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -11675,6 +11736,9 @@ func (m *Object) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -11705,7 +11769,7 @@ func (m *Tag) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -11733,7 +11797,7 @@ func (m *Tag) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11743,6 +11807,9 @@ func (m *Tag) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -11755,6 +11822,9 @@ func (m *Tag) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -11785,7 +11855,7 @@ func (m *RepoInfo) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -11813,7 +11883,7 @@ func (m *RepoInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11822,6 +11892,9 @@ func (m *RepoInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -11846,7 +11919,7 @@ func (m *RepoInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11855,6 +11928,9 @@ func (m *RepoInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -11879,7 +11955,7 @@ func (m *RepoInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.SizeBytes |= (uint64(b) & 0x7F) << shift
+				m.SizeBytes |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11898,7 +11974,7 @@ func (m *RepoInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11908,6 +11984,9 @@ func (m *RepoInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -11927,7 +12006,7 @@ func (m *RepoInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11936,6 +12015,9 @@ func (m *RepoInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -11960,7 +12042,7 @@ func (m *RepoInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11969,6 +12051,9 @@ func (m *RepoInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -11984,6 +12069,9 @@ func (m *RepoInfo) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -12014,7 +12102,7 @@ func (m *RepoAuthInfo) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -12042,7 +12130,7 @@ func (m *RepoAuthInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.AccessLevel |= (auth.Scope(b) & 0x7F) << shift
+				m.AccessLevel |= auth.Scope(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12054,6 +12142,9 @@ func (m *RepoAuthInfo) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -12084,7 +12175,7 @@ func (m *Commit) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -12112,7 +12203,7 @@ func (m *Commit) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12121,6 +12212,9 @@ func (m *Commit) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -12145,7 +12239,7 @@ func (m *Commit) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12155,6 +12249,9 @@ func (m *Commit) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -12167,6 +12264,9 @@ func (m *Commit) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -12197,7 +12297,7 @@ func (m *CommitRange) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -12225,7 +12325,7 @@ func (m *CommitRange) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12234,6 +12334,9 @@ func (m *CommitRange) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -12258,7 +12361,7 @@ func (m *CommitRange) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12267,6 +12370,9 @@ func (m *CommitRange) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -12284,6 +12390,9 @@ func (m *CommitRange) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -12314,7 +12423,7 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -12342,7 +12451,7 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12351,6 +12460,9 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -12375,7 +12487,7 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12384,6 +12496,9 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -12408,7 +12523,7 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12417,6 +12532,9 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -12441,7 +12559,7 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12450,6 +12568,9 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -12474,7 +12595,7 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.SizeBytes |= (uint64(b) & 0x7F) << shift
+				m.SizeBytes |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12493,7 +12614,7 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12502,6 +12623,9 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -12524,7 +12648,7 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12533,6 +12657,9 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -12557,7 +12684,7 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12567,6 +12694,9 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -12586,7 +12716,7 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12595,6 +12725,9 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -12617,7 +12750,7 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12626,6 +12759,9 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -12648,7 +12784,7 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12657,6 +12793,9 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -12679,7 +12818,7 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ReadyProvenance |= (int64(b) & 0x7F) << shift
+				m.ReadyProvenance |= int64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12698,7 +12837,7 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12707,6 +12846,9 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -12729,7 +12871,7 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12738,6 +12880,9 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -12755,6 +12900,9 @@ func (m *CommitInfo) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -12785,7 +12933,7 @@ func (m *FileInfo) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -12813,7 +12961,7 @@ func (m *FileInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12822,6 +12970,9 @@ func (m *FileInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -12846,7 +12997,7 @@ func (m *FileInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.FileType |= (FileType(b) & 0x7F) << shift
+				m.FileType |= FileType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12865,7 +13016,7 @@ func (m *FileInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.SizeBytes |= (uint64(b) & 0x7F) << shift
+				m.SizeBytes |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12884,7 +13035,7 @@ func (m *FileInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12894,6 +13045,9 @@ func (m *FileInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -12913,7 +13067,7 @@ func (m *FileInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				byteLen |= (int(b) & 0x7F) << shift
+				byteLen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12922,6 +13076,9 @@ func (m *FileInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -12944,7 +13101,7 @@ func (m *FileInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12953,6 +13110,9 @@ func (m *FileInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -12975,7 +13135,7 @@ func (m *FileInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12984,6 +13144,9 @@ func (m *FileInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13006,7 +13169,7 @@ func (m *FileInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13015,6 +13178,9 @@ func (m *FileInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13032,6 +13198,9 @@ func (m *FileInfo) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -13062,7 +13231,7 @@ func (m *ByteRange) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -13090,7 +13259,7 @@ func (m *ByteRange) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Lower |= (uint64(b) & 0x7F) << shift
+				m.Lower |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13109,7 +13278,7 @@ func (m *ByteRange) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Upper |= (uint64(b) & 0x7F) << shift
+				m.Upper |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13121,6 +13290,9 @@ func (m *ByteRange) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -13151,7 +13323,7 @@ func (m *BlockRef) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -13179,7 +13351,7 @@ func (m *BlockRef) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13188,6 +13360,9 @@ func (m *BlockRef) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13212,7 +13387,7 @@ func (m *BlockRef) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13221,6 +13396,9 @@ func (m *BlockRef) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13238,6 +13416,9 @@ func (m *BlockRef) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -13268,7 +13449,7 @@ func (m *ObjectInfo) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -13296,7 +13477,7 @@ func (m *ObjectInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13305,6 +13486,9 @@ func (m *ObjectInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13329,7 +13513,7 @@ func (m *ObjectInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13338,6 +13522,9 @@ func (m *ObjectInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13355,6 +13542,9 @@ func (m *ObjectInfo) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -13385,7 +13575,7 @@ func (m *CreateRepoRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -13413,7 +13603,7 @@ func (m *CreateRepoRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13422,6 +13612,9 @@ func (m *CreateRepoRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13446,7 +13639,7 @@ func (m *CreateRepoRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13456,6 +13649,9 @@ func (m *CreateRepoRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13475,7 +13671,7 @@ func (m *CreateRepoRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13488,6 +13684,9 @@ func (m *CreateRepoRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -13518,7 +13717,7 @@ func (m *InspectRepoRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -13546,7 +13745,7 @@ func (m *InspectRepoRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13555,6 +13754,9 @@ func (m *InspectRepoRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13572,6 +13774,9 @@ func (m *InspectRepoRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -13602,7 +13807,7 @@ func (m *ListRepoRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -13623,6 +13828,9 @@ func (m *ListRepoRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -13653,7 +13861,7 @@ func (m *ListRepoResponse) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -13681,7 +13889,7 @@ func (m *ListRepoResponse) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13690,6 +13898,9 @@ func (m *ListRepoResponse) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13705,6 +13916,9 @@ func (m *ListRepoResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -13735,7 +13949,7 @@ func (m *DeleteRepoRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -13763,7 +13977,7 @@ func (m *DeleteRepoRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13772,6 +13986,9 @@ func (m *DeleteRepoRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13796,7 +14013,7 @@ func (m *DeleteRepoRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13816,7 +14033,7 @@ func (m *DeleteRepoRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13829,6 +14046,9 @@ func (m *DeleteRepoRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -13859,7 +14079,7 @@ func (m *StartCommitRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -13887,7 +14107,7 @@ func (m *StartCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13896,6 +14116,9 @@ func (m *StartCommitRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13920,7 +14143,7 @@ func (m *StartCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13929,6 +14152,9 @@ func (m *StartCommitRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13951,7 +14177,7 @@ func (m *StartCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13961,6 +14187,9 @@ func (m *StartCommitRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13980,7 +14209,7 @@ func (m *StartCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13990,6 +14219,9 @@ func (m *StartCommitRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14002,6 +14234,9 @@ func (m *StartCommitRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -14032,7 +14267,7 @@ func (m *BuildCommitRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -14060,7 +14295,7 @@ func (m *BuildCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14069,6 +14304,9 @@ func (m *BuildCommitRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14093,7 +14331,7 @@ func (m *BuildCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14102,6 +14340,9 @@ func (m *BuildCommitRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14124,7 +14365,7 @@ func (m *BuildCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14133,6 +14374,9 @@ func (m *BuildCommitRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14157,7 +14401,7 @@ func (m *BuildCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14167,6 +14411,9 @@ func (m *BuildCommitRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14186,7 +14433,7 @@ func (m *BuildCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14196,6 +14443,9 @@ func (m *BuildCommitRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14208,6 +14458,9 @@ func (m *BuildCommitRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -14238,7 +14491,7 @@ func (m *FinishCommitRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -14266,7 +14519,7 @@ func (m *FinishCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14275,6 +14528,9 @@ func (m *FinishCommitRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14299,7 +14555,7 @@ func (m *FinishCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14309,6 +14565,9 @@ func (m *FinishCommitRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14328,7 +14587,7 @@ func (m *FinishCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14337,6 +14596,9 @@ func (m *FinishCommitRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14361,7 +14623,7 @@ func (m *FinishCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14381,7 +14643,7 @@ func (m *FinishCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14390,6 +14652,9 @@ func (m *FinishCommitRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14412,7 +14677,7 @@ func (m *FinishCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.SizeBytes |= (uint64(b) & 0x7F) << shift
+				m.SizeBytes |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14431,7 +14696,7 @@ func (m *FinishCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14440,6 +14705,9 @@ func (m *FinishCommitRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14457,6 +14725,9 @@ func (m *FinishCommitRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -14487,7 +14758,7 @@ func (m *InspectCommitRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -14515,7 +14786,7 @@ func (m *InspectCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14524,6 +14795,9 @@ func (m *InspectCommitRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14548,7 +14822,7 @@ func (m *InspectCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.BlockState |= (CommitState(b) & 0x7F) << shift
+				m.BlockState |= CommitState(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14560,6 +14834,9 @@ func (m *InspectCommitRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -14590,7 +14867,7 @@ func (m *ListCommitRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -14618,7 +14895,7 @@ func (m *ListCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14627,6 +14904,9 @@ func (m *ListCommitRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14651,7 +14931,7 @@ func (m *ListCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14660,6 +14940,9 @@ func (m *ListCommitRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14684,7 +14967,7 @@ func (m *ListCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14693,6 +14976,9 @@ func (m *ListCommitRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14717,7 +15003,7 @@ func (m *ListCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Number |= (uint64(b) & 0x7F) << shift
+				m.Number |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14729,6 +15015,9 @@ func (m *ListCommitRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -14759,7 +15048,7 @@ func (m *CommitInfos) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -14787,7 +15076,7 @@ func (m *CommitInfos) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14796,6 +15085,9 @@ func (m *CommitInfos) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14811,6 +15103,9 @@ func (m *CommitInfos) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -14841,7 +15136,7 @@ func (m *CreateBranchRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -14869,7 +15164,7 @@ func (m *CreateBranchRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14878,6 +15173,9 @@ func (m *CreateBranchRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14902,7 +15200,7 @@ func (m *CreateBranchRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14912,6 +15210,9 @@ func (m *CreateBranchRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14931,7 +15232,7 @@ func (m *CreateBranchRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14940,6 +15241,9 @@ func (m *CreateBranchRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14964,7 +15268,7 @@ func (m *CreateBranchRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14973,6 +15277,9 @@ func (m *CreateBranchRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14988,6 +15295,9 @@ func (m *CreateBranchRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -15018,7 +15328,7 @@ func (m *InspectBranchRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -15046,7 +15356,7 @@ func (m *InspectBranchRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -15055,6 +15365,9 @@ func (m *InspectBranchRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -15072,6 +15385,9 @@ func (m *InspectBranchRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -15102,7 +15418,7 @@ func (m *ListBranchRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -15130,7 +15446,7 @@ func (m *ListBranchRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -15139,6 +15455,9 @@ func (m *ListBranchRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -15156,6 +15475,9 @@ func (m *ListBranchRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -15186,7 +15508,7 @@ func (m *DeleteBranchRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -15214,7 +15536,7 @@ func (m *DeleteBranchRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -15223,6 +15545,9 @@ func (m *DeleteBranchRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -15247,7 +15572,7 @@ func (m *DeleteBranchRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -15260,6 +15585,9 @@ func (m *DeleteBranchRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -15290,7 +15618,7 @@ func (m *DeleteCommitRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -15318,7 +15646,7 @@ func (m *DeleteCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -15327,6 +15655,9 @@ func (m *DeleteCommitRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -15344,6 +15675,9 @@ func (m *DeleteCommitRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -15374,7 +15708,7 @@ func (m *FlushCommitRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -15402,7 +15736,7 @@ func (m *FlushCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -15411,6 +15745,9 @@ func (m *FlushCommitRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -15433,7 +15770,7 @@ func (m *FlushCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -15442,6 +15779,9 @@ func (m *FlushCommitRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -15457,6 +15797,9 @@ func (m *FlushCommitRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -15487,7 +15830,7 @@ func (m *SubscribeCommitRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -15515,7 +15858,7 @@ func (m *SubscribeCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -15524,6 +15867,9 @@ func (m *SubscribeCommitRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -15548,7 +15894,7 @@ func (m *SubscribeCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -15558,6 +15904,9 @@ func (m *SubscribeCommitRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -15577,7 +15926,7 @@ func (m *SubscribeCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -15586,6 +15935,9 @@ func (m *SubscribeCommitRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -15610,7 +15962,7 @@ func (m *SubscribeCommitRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.State |= (CommitState(b) & 0x7F) << shift
+				m.State |= CommitState(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -15622,6 +15974,9 @@ func (m *SubscribeCommitRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -15652,7 +16007,7 @@ func (m *GetFileRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -15680,7 +16035,7 @@ func (m *GetFileRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -15689,6 +16044,9 @@ func (m *GetFileRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -15713,7 +16071,7 @@ func (m *GetFileRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.OffsetBytes |= (int64(b) & 0x7F) << shift
+				m.OffsetBytes |= int64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -15732,7 +16090,7 @@ func (m *GetFileRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.SizeBytes |= (int64(b) & 0x7F) << shift
+				m.SizeBytes |= int64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -15744,6 +16102,9 @@ func (m *GetFileRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -15774,7 +16135,7 @@ func (m *GetFileResponse) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -15790,7 +16151,7 @@ func (m *GetFileResponse) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field File", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field FileInfo", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -15802,7 +16163,7 @@ func (m *GetFileResponse) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -15811,13 +16172,16 @@ func (m *GetFileResponse) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.File == nil {
-				m.File = &File{}
+			if m.FileInfo == nil {
+				m.FileInfo = &FileInfo{}
 			}
-			if err := m.File.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.FileInfo.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -15835,7 +16199,7 @@ func (m *GetFileResponse) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				byteLen |= (int(b) & 0x7F) << shift
+				byteLen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -15844,6 +16208,9 @@ func (m *GetFileResponse) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -15859,6 +16226,9 @@ func (m *GetFileResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -15889,7 +16259,7 @@ func (m *OverwriteIndex) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -15917,7 +16287,7 @@ func (m *OverwriteIndex) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Index |= (int64(b) & 0x7F) << shift
+				m.Index |= int64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -15929,6 +16299,9 @@ func (m *OverwriteIndex) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -15959,7 +16332,7 @@ func (m *PutFileRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -15987,7 +16360,7 @@ func (m *PutFileRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -15996,6 +16369,9 @@ func (m *PutFileRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -16020,7 +16396,7 @@ func (m *PutFileRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				byteLen |= (int(b) & 0x7F) << shift
+				byteLen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16029,6 +16405,9 @@ func (m *PutFileRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -16051,7 +16430,7 @@ func (m *PutFileRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16061,6 +16440,9 @@ func (m *PutFileRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -16080,7 +16462,7 @@ func (m *PutFileRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16100,7 +16482,7 @@ func (m *PutFileRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Delimiter |= (Delimiter(b) & 0x7F) << shift
+				m.Delimiter |= Delimiter(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16119,7 +16501,7 @@ func (m *PutFileRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.TargetFileDatums |= (int64(b) & 0x7F) << shift
+				m.TargetFileDatums |= int64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16138,7 +16520,7 @@ func (m *PutFileRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.TargetFileBytes |= (int64(b) & 0x7F) << shift
+				m.TargetFileBytes |= int64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16157,7 +16539,7 @@ func (m *PutFileRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16166,6 +16548,9 @@ func (m *PutFileRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -16190,7 +16575,7 @@ func (m *PutFileRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.HeaderRecords |= (int64(b) & 0x7F) << shift
+				m.HeaderRecords |= int64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16202,6 +16587,9 @@ func (m *PutFileRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -16232,7 +16620,7 @@ func (m *PutFileRecord) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -16260,7 +16648,7 @@ func (m *PutFileRecord) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.SizeBytes |= (int64(b) & 0x7F) << shift
+				m.SizeBytes |= int64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16279,7 +16667,7 @@ func (m *PutFileRecord) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16289,6 +16677,9 @@ func (m *PutFileRecord) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -16308,7 +16699,7 @@ func (m *PutFileRecord) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16317,6 +16708,9 @@ func (m *PutFileRecord) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -16334,6 +16728,9 @@ func (m *PutFileRecord) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -16364,7 +16761,7 @@ func (m *PutFileRecords) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -16392,7 +16789,7 @@ func (m *PutFileRecords) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16412,7 +16809,7 @@ func (m *PutFileRecords) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16421,6 +16818,9 @@ func (m *PutFileRecords) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -16443,7 +16843,7 @@ func (m *PutFileRecords) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16463,7 +16863,7 @@ func (m *PutFileRecords) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16472,6 +16872,9 @@ func (m *PutFileRecords) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -16496,7 +16899,7 @@ func (m *PutFileRecords) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16505,6 +16908,9 @@ func (m *PutFileRecords) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -16522,6 +16928,9 @@ func (m *PutFileRecords) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -16552,7 +16961,7 @@ func (m *CopyFileRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -16580,7 +16989,7 @@ func (m *CopyFileRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16589,6 +16998,9 @@ func (m *CopyFileRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -16613,7 +17025,7 @@ func (m *CopyFileRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16622,6 +17034,9 @@ func (m *CopyFileRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -16646,7 +17061,7 @@ func (m *CopyFileRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16659,6 +17074,9 @@ func (m *CopyFileRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -16689,7 +17107,7 @@ func (m *InspectFileRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -16717,7 +17135,7 @@ func (m *InspectFileRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16726,6 +17144,9 @@ func (m *InspectFileRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -16743,6 +17164,9 @@ func (m *InspectFileRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -16773,7 +17197,7 @@ func (m *ListFileRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -16801,7 +17225,7 @@ func (m *ListFileRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16810,6 +17234,9 @@ func (m *ListFileRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -16834,7 +17261,7 @@ func (m *ListFileRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16854,7 +17281,7 @@ func (m *ListFileRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.History |= (int64(b) & 0x7F) << shift
+				m.History |= int64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16866,6 +17293,9 @@ func (m *ListFileRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -16896,7 +17326,7 @@ func (m *WalkFileRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -16924,7 +17354,7 @@ func (m *WalkFileRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16933,6 +17363,9 @@ func (m *WalkFileRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -16950,6 +17383,9 @@ func (m *WalkFileRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -16980,7 +17416,7 @@ func (m *GlobFileRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -17008,7 +17444,7 @@ func (m *GlobFileRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17017,6 +17453,9 @@ func (m *GlobFileRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -17041,7 +17480,7 @@ func (m *GlobFileRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17051,6 +17490,9 @@ func (m *GlobFileRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -17063,6 +17505,9 @@ func (m *GlobFileRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -17093,7 +17538,7 @@ func (m *FileInfos) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -17121,7 +17566,7 @@ func (m *FileInfos) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17130,6 +17575,9 @@ func (m *FileInfos) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -17145,6 +17593,9 @@ func (m *FileInfos) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -17175,7 +17626,7 @@ func (m *DiffFileRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -17203,7 +17654,7 @@ func (m *DiffFileRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17212,6 +17663,9 @@ func (m *DiffFileRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -17236,7 +17690,7 @@ func (m *DiffFileRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17245,6 +17699,9 @@ func (m *DiffFileRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -17269,7 +17726,7 @@ func (m *DiffFileRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17282,6 +17739,9 @@ func (m *DiffFileRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -17312,7 +17772,7 @@ func (m *DiffFileResponse) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -17340,7 +17800,7 @@ func (m *DiffFileResponse) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17349,6 +17809,9 @@ func (m *DiffFileResponse) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -17371,7 +17834,7 @@ func (m *DiffFileResponse) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17380,6 +17843,9 @@ func (m *DiffFileResponse) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -17395,6 +17861,9 @@ func (m *DiffFileResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -17425,7 +17894,7 @@ func (m *DeleteFileRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -17453,7 +17922,7 @@ func (m *DeleteFileRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17462,6 +17931,9 @@ func (m *DeleteFileRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -17479,6 +17951,9 @@ func (m *DeleteFileRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -17509,7 +17984,7 @@ func (m *PutObjectRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -17537,7 +18012,7 @@ func (m *PutObjectRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				byteLen |= (int(b) & 0x7F) << shift
+				byteLen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17546,6 +18021,9 @@ func (m *PutObjectRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -17568,7 +18046,7 @@ func (m *PutObjectRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17577,6 +18055,9 @@ func (m *PutObjectRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -17599,7 +18080,7 @@ func (m *PutObjectRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17608,6 +18089,9 @@ func (m *PutObjectRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -17625,6 +18109,9 @@ func (m *PutObjectRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -17655,7 +18142,7 @@ func (m *GetObjectsRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -17683,7 +18170,7 @@ func (m *GetObjectsRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17692,6 +18179,9 @@ func (m *GetObjectsRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -17714,7 +18204,7 @@ func (m *GetObjectsRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.OffsetBytes |= (uint64(b) & 0x7F) << shift
+				m.OffsetBytes |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17733,7 +18223,7 @@ func (m *GetObjectsRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.SizeBytes |= (uint64(b) & 0x7F) << shift
+				m.SizeBytes |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17752,7 +18242,7 @@ func (m *GetObjectsRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.TotalSize |= (uint64(b) & 0x7F) << shift
+				m.TotalSize |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17764,6 +18254,9 @@ func (m *GetObjectsRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -17794,7 +18287,7 @@ func (m *GetBlocksRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -17822,7 +18315,7 @@ func (m *GetBlocksRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17831,6 +18324,9 @@ func (m *GetBlocksRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -17853,7 +18349,7 @@ func (m *GetBlocksRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.OffsetBytes |= (uint64(b) & 0x7F) << shift
+				m.OffsetBytes |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17872,7 +18368,7 @@ func (m *GetBlocksRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.SizeBytes |= (uint64(b) & 0x7F) << shift
+				m.SizeBytes |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17891,7 +18387,7 @@ func (m *GetBlocksRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.TotalSize |= (uint64(b) & 0x7F) << shift
+				m.TotalSize |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17903,6 +18399,9 @@ func (m *GetBlocksRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -17933,7 +18432,7 @@ func (m *TagObjectRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -17961,7 +18460,7 @@ func (m *TagObjectRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17970,6 +18469,9 @@ func (m *TagObjectRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -17994,7 +18496,7 @@ func (m *TagObjectRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18003,6 +18505,9 @@ func (m *TagObjectRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -18018,6 +18523,9 @@ func (m *TagObjectRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -18048,7 +18556,7 @@ func (m *ListObjectsRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -18069,6 +18577,9 @@ func (m *ListObjectsRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -18099,7 +18610,7 @@ func (m *ListTagsRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -18127,7 +18638,7 @@ func (m *ListTagsRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18137,6 +18648,9 @@ func (m *ListTagsRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -18156,7 +18670,7 @@ func (m *ListTagsRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18169,6 +18683,9 @@ func (m *ListTagsRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -18199,7 +18716,7 @@ func (m *ListTagsResponse) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -18227,7 +18744,7 @@ func (m *ListTagsResponse) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18236,6 +18753,9 @@ func (m *ListTagsResponse) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -18260,7 +18780,7 @@ func (m *ListTagsResponse) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18269,6 +18789,9 @@ func (m *ListTagsResponse) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -18286,6 +18809,9 @@ func (m *ListTagsResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -18316,7 +18842,7 @@ func (m *DeleteObjectsRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -18344,7 +18870,7 @@ func (m *DeleteObjectsRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18353,6 +18879,9 @@ func (m *DeleteObjectsRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -18368,6 +18897,9 @@ func (m *DeleteObjectsRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -18398,7 +18930,7 @@ func (m *DeleteObjectsResponse) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -18419,6 +18951,9 @@ func (m *DeleteObjectsResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -18449,7 +18984,7 @@ func (m *DeleteTagsRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -18477,7 +19012,7 @@ func (m *DeleteTagsRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18486,6 +19021,9 @@ func (m *DeleteTagsRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -18501,6 +19039,9 @@ func (m *DeleteTagsRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -18531,7 +19072,7 @@ func (m *DeleteTagsResponse) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -18552,6 +19093,9 @@ func (m *DeleteTagsResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -18582,7 +19126,7 @@ func (m *CheckObjectRequest) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -18610,7 +19154,7 @@ func (m *CheckObjectRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18619,6 +19163,9 @@ func (m *CheckObjectRequest) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -18636,6 +19183,9 @@ func (m *CheckObjectRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -18666,7 +19216,7 @@ func (m *CheckObjectResponse) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -18694,7 +19244,7 @@ func (m *CheckObjectResponse) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18707,6 +19257,9 @@ func (m *CheckObjectResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -18737,7 +19290,7 @@ func (m *Objects) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -18765,7 +19318,7 @@ func (m *Objects) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18774,6 +19327,9 @@ func (m *Objects) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -18789,6 +19345,9 @@ func (m *Objects) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -18819,7 +19378,7 @@ func (m *ObjectIndex) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -18847,7 +19406,7 @@ func (m *ObjectIndex) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18856,6 +19415,9 @@ func (m *ObjectIndex) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -18876,7 +19438,7 @@ func (m *ObjectIndex) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					wire |= (uint64(b) & 0x7F) << shift
+					wire |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -18893,7 +19455,7 @@ func (m *ObjectIndex) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						stringLenmapkey |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -18903,6 +19465,9 @@ func (m *ObjectIndex) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthPfs
 					}
 					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthPfs
+					}
 					if postStringIndexmapkey > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -18919,7 +19484,7 @@ func (m *ObjectIndex) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						mapmsglen |= (int(b) & 0x7F) << shift
+						mapmsglen |= int(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -18928,7 +19493,7 @@ func (m *ObjectIndex) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthPfs
 					}
 					postmsgIndex := iNdEx + mapmsglen
-					if mapmsglen < 0 {
+					if postmsgIndex < 0 {
 						return ErrInvalidLengthPfs
 					}
 					if postmsgIndex > l {
@@ -18970,7 +19535,7 @@ func (m *ObjectIndex) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18979,6 +19544,9 @@ func (m *ObjectIndex) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthPfs
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPfs
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -18999,7 +19567,7 @@ func (m *ObjectIndex) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					wire |= (uint64(b) & 0x7F) << shift
+					wire |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -19016,7 +19584,7 @@ func (m *ObjectIndex) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						stringLenmapkey |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -19026,6 +19594,9 @@ func (m *ObjectIndex) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthPfs
 					}
 					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthPfs
+					}
 					if postStringIndexmapkey > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -19042,7 +19613,7 @@ func (m *ObjectIndex) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						mapmsglen |= (int(b) & 0x7F) << shift
+						mapmsglen |= int(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -19051,7 +19622,7 @@ func (m *ObjectIndex) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthPfs
 					}
 					postmsgIndex := iNdEx + mapmsglen
-					if mapmsglen < 0 {
+					if postmsgIndex < 0 {
 						return ErrInvalidLengthPfs
 					}
 					if postmsgIndex > l {
@@ -19086,6 +19657,9 @@ func (m *ObjectIndex) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthPfs
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthPfs
 			}
 			if (iNdEx + skippy) > l {
@@ -19155,8 +19729,11 @@ func skipPfs(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
+				return 0, ErrInvalidLengthPfs
+			}
+			iNdEx += length
+			if iNdEx < 0 {
 				return 0, ErrInvalidLengthPfs
 			}
 			return iNdEx, nil
@@ -19187,6 +19764,9 @@ func skipPfs(dAtA []byte) (n int, err error) {
 					return 0, err
 				}
 				iNdEx = start + next
+				if iNdEx < 0 {
+					return 0, ErrInvalidLengthPfs
+				}
 			}
 			return iNdEx, nil
 		case 4:

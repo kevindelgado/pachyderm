@@ -2,6 +2,7 @@
 package sync
 
 import (
+	"fmt"
 	"io"
 	"os"
 	"path"
@@ -134,7 +135,7 @@ func (p *Puller) makeFile(path string, f func(io.Writer) error) (retErr error) {
 	return nil
 }
 
-func collectStats(client *pachclient.APIClient, file string, fileInfo *pfs.FileInfo, statsTree *hashtree.Ordered, statsRoot string) error {
+func collectStats(client *pachclient.APIClient, root, file string, fileInfo *pfs.FileInfo, statsTree *hashtree.Ordered, statsRoot string) error {
 	basepath, err := filepath.Rel(file, fileInfo.File.Path)
 	if err != nil {
 		return err
@@ -156,6 +157,10 @@ func collectStats(client *pachclient.APIClient, file string, fileInfo *pfs.FileI
 			statsTree.PutFile(statsPath, fileInfo.Hash, int64(fileInfo.SizeBytes), &hashtree.FileNodeProto{BlockRefs: blockRefs})
 		}
 	}
+	path := filepath.Join(root, basepath)
+	if fileInfo.FileType == pfs.FileType_DIR {
+		return os.MkdirAll(path, 0700)
+	}
 	return nil
 }
 
@@ -174,30 +179,7 @@ func (p *Puller) Pull(client *pachclient.APIClient, root string, repo, commit, f
 	var eg errgroup.Group
 	if pipes || emptyFiles {
 		if err := client.Walk(repo, commit, file, func(fileInfo *pfs.FileInfo) error {
-			// BEGIN STATS
-			// basepath, err := filepath.Rel(file, fileInfo.File.Path)
-			// if err != nil {
-			// 	return err
-			// }
-			// if statsTree != nil {
-			// 	statsPath := filepath.Join(statsRoot, basepath)
-			// 	if fileInfo.FileType == pfs.FileType_DIR {
-			// 		statsTree.PutDir(statsPath)
-			// 	} else {
-			// 		var blockRefs []*pfs.BlockRef
-			// 		for _, object := range fileInfo.Objects {
-			// 			objectInfo, err := client.InspectObject(object.Hash)
-			// 			if err != nil {
-			// 				return err
-			// 			}
-			// 			blockRefs = append(blockRefs, objectInfo.BlockRef)
-			// 		}
-			// 		blockRefs = append(blockRefs, fileInfo.BlockRefs...)
-			// 		statsTree.PutFile(statsPath, fileInfo.Hash, int64(fileInfo.SizeBytes), &hashtree.FileNodeProto{BlockRefs: blockRefs})
-			// 	}
-			// }
-			// END STATS
-			if err := collectStats(client, file, fileInfo, statsTree, statsRoot); err != nil {
+			if err := collectStats(client, root, file, fileInfo, statsTree, statsRoot); err != nil {
 				return nil
 			}
 			// TODO check if this directory creatino stuff can be added to collectStats()
@@ -206,6 +188,7 @@ func (p *Puller) Pull(client *pachclient.APIClient, root string, repo, commit, f
 				return err
 			}
 			path := filepath.Join(root, basepath)
+			fmt.Println("pipes pull path", path, "root", root, "basepath", basepath)
 			if fileInfo.FileType == pfs.FileType_DIR {
 				return os.MkdirAll(path, 0700)
 			}
@@ -217,13 +200,6 @@ func (p *Puller) Pull(client *pachclient.APIClient, root string, repo, commit, f
 			if emptyFiles {
 				return p.makeFile(path, func(w io.Writer) error { return nil })
 			}
-			// eg.Go(func() (retErr error) {
-			// 	limiter.Acquire()
-			// 	defer limiter.Release()
-			// 	return p.makeFile(path, func(w io.Writer) error {
-			// 		return client.GetFile(repo, commit, fileInfo.File.Path, 0, 0, w)
-			// 	})
-			// })
 			return nil
 		}); err != nil {
 			return err
@@ -233,14 +209,12 @@ func (p *Puller) Pull(client *pachclient.APIClient, root string, repo, commit, f
 	eg.Go(func() (retErr error) {
 		limiter.Acquire()
 		defer limiter.Release()
-		return client.GetFiles(repo, commit, file, 0, 0, func(f *pfs.File, r io.Reader) error {
-			fileInfo := &pfs.FileInfo{
-				File: f,
-			}
-			if err := collectStats(client, file, fileInfo, statsTree, statsRoot); err != nil {
+		return client.GetFiles(repo, commit, file, 0, 0, func(fi *pfs.FileInfo, r io.Reader) error {
+			if err := collectStats(client, root, file, fi, statsTree, statsRoot); err != nil {
 				return err
 			}
-			newPath := filepath.Join(root, f.Path)
+			newPath := filepath.Join(root, fi.File.Path)
+			fmt.Println("not-pipes pull newPathath", newPath, "root", root, "fi.File.Path", fi.File.Path)
 			err := p.makeFile(newPath, func(w io.Writer) error {
 				_, err := io.Copy(w, r)
 				return err
@@ -249,52 +223,6 @@ func (p *Puller) Pull(client *pachclient.APIClient, root string, repo, commit, f
 		})
 	})
 	return eg.Wait()
-	// if err := client.Walk(repo, commit, file, func(fileInfo *pfs.FileInfo) error {
-	// 	basepath, err := filepath.Rel(file, fileInfo.File.Path)
-	// 	if err != nil {
-	// 		return err
-	// 	}
-	// 	if statsTree != nil {
-	// 		statsPath := filepath.Join(statsRoot, basepath)
-	// 		if fileInfo.FileType == pfs.FileType_DIR {
-	// 			statsTree.PutDir(statsPath)
-	// 		} else {
-	// 			var blockRefs []*pfs.BlockRef
-	// 			for _, object := range fileInfo.Objects {
-	// 				objectInfo, err := client.InspectObject(object.Hash)
-	// 				if err != nil {
-	// 					return err
-	// 				}
-	// 				blockRefs = append(blockRefs, objectInfo.BlockRef)
-	// 			}
-	// 			blockRefs = append(blockRefs, fileInfo.BlockRefs...)
-	// 			statsTree.PutFile(statsPath, fileInfo.Hash, int64(fileInfo.SizeBytes), &hashtree.FileNodeProto{BlockRefs: blockRefs})
-	// 		}
-	// 	}
-	// 	path := filepath.Join(root, basepath)
-	// 	if fileInfo.FileType == pfs.FileType_DIR {
-	// 		return os.MkdirAll(path, 0700)
-	// 	}
-	// 	if pipes {
-	// 		return p.makePipe(path, func(w io.Writer) error {
-	// 			return client.GetFile(repo, commit, fileInfo.File.Path, 0, 0, w)
-	// 		})
-	// 	}
-	// 	if emptyFiles {
-	// 		return p.makeFile(path, func(w io.Writer) error { return nil })
-	// 	}
-	// 	eg.Go(func() (retErr error) {
-	// 		limiter.Acquire()
-	// 		defer limiter.Release()
-	// 		return p.makeFile(path, func(w io.Writer) error {
-	// 			return client.GetFile(repo, commit, fileInfo.File.Path, 0, 0, w)
-	// 		})
-	// 	})
-	// 	return nil
-	// }); err != nil {
-	// 	return err
-	// }
-	// return eg.Wait()
 }
 
 // PullDiff is like Pull except that it materializes a Diff of the content
