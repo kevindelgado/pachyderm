@@ -2,7 +2,6 @@
 package sync
 
 import (
-	"fmt"
 	"io"
 	"os"
 	"path"
@@ -135,10 +134,10 @@ func (p *Puller) makeFile(path string, f func(io.Writer) error) (retErr error) {
 	return nil
 }
 
-func collectStats(client *pachclient.APIClient, root, file string, fileInfo *pfs.FileInfo, statsTree *hashtree.Ordered, statsRoot string) error {
+func collectStatsForNewPath(client *pachclient.APIClient, root, file string, fileInfo *pfs.FileInfo, statsTree *hashtree.Ordered, statsRoot string) (string, error) {
 	basepath, err := filepath.Rel(file, fileInfo.File.Path)
 	if err != nil {
-		return err
+		return "", err
 	}
 	if statsTree != nil {
 		statsPath := filepath.Join(statsRoot, basepath)
@@ -149,7 +148,7 @@ func collectStats(client *pachclient.APIClient, root, file string, fileInfo *pfs
 			for _, object := range fileInfo.Objects {
 				objectInfo, err := client.InspectObject(object.Hash)
 				if err != nil {
-					return err
+					return "", err
 				}
 				blockRefs = append(blockRefs, objectInfo.BlockRef)
 			}
@@ -158,10 +157,7 @@ func collectStats(client *pachclient.APIClient, root, file string, fileInfo *pfs
 		}
 	}
 	path := filepath.Join(root, basepath)
-	if fileInfo.FileType == pfs.FileType_DIR {
-		return os.MkdirAll(path, 0700)
-	}
-	return nil
+	return path, nil
 }
 
 // Pull clones an entire repo at a certain commit.
@@ -177,52 +173,42 @@ func (p *Puller) Pull(client *pachclient.APIClient, root string, repo, commit, f
 	pipes bool, emptyFiles bool, concurrency int, statsTree *hashtree.Ordered, statsRoot string) error {
 	limiter := limit.New(concurrency)
 	var eg errgroup.Group
-	if pipes || emptyFiles {
-		if err := client.Walk(repo, commit, file, func(fileInfo *pfs.FileInfo) error {
-			if err := collectStats(client, root, file, fileInfo, statsTree, statsRoot); err != nil {
-				return nil
-			}
-			// TODO check if this directory creatino stuff can be added to collectStats()
-			basepath, err := filepath.Rel(file, fileInfo.File.Path)
-			if err != nil {
-				return err
-			}
-			path := filepath.Join(root, basepath)
-			fmt.Println("pipes pull path", path, "root", root, "basepath", basepath)
-			if fileInfo.FileType == pfs.FileType_DIR {
-				return os.MkdirAll(path, 0700)
-			}
-			if pipes {
-				return p.makePipe(path, func(w io.Writer) error {
-					return client.GetFile(repo, commit, fileInfo.File.Path, 0, 0, w)
+	if !pipes && !emptyFiles {
+		eg.Go(func() (retErr error) {
+			limiter.Acquire()
+			defer limiter.Release()
+			return client.GetFiles(repo, commit, file, 0, 0, func(fi *pfs.FileInfo, r io.Reader) error {
+				newPath, err := collectStatsForNewPath(client, root, file, fi, statsTree, statsRoot)
+				if err != nil {
+					return err
+				}
+				err = p.makeFile(newPath, func(w io.Writer) error {
+					_, err := io.Copy(w, r)
+					return err
 				})
-			}
-			if emptyFiles {
-				return p.makeFile(path, func(w io.Writer) error { return nil })
-			}
-			return nil
-		}); err != nil {
-			return err
-		}
-		return nil
-	}
-	eg.Go(func() (retErr error) {
-		limiter.Acquire()
-		defer limiter.Release()
-		return client.GetFiles(repo, commit, file, 0, 0, func(fi *pfs.FileInfo, r io.Reader) error {
-			if err := collectStats(client, root, file, fi, statsTree, statsRoot); err != nil {
-				return err
-			}
-			newPath := filepath.Join(root, fi.File.Path)
-			fmt.Println("not-pipes pull newPathath", newPath, "root", root, "fi.File.Path", fi.File.Path)
-			err := p.makeFile(newPath, func(w io.Writer) error {
-				_, err := io.Copy(w, r)
 				return err
 			})
-			return err
 		})
-	})
-	return eg.Wait()
+		return eg.Wait()
+	}
+	if err := client.Walk(repo, commit, file, func(fileInfo *pfs.FileInfo) error {
+		newPath, err := collectStatsForNewPath(client, root, file, fileInfo, statsTree, statsRoot)
+		if err != nil {
+			return nil
+		}
+		if fileInfo.FileType == pfs.FileType_DIR {
+			return os.MkdirAll(newPath, 0700)
+		}
+		if pipes {
+			return p.makePipe(newPath, func(w io.Writer) error {
+				return client.GetFile(repo, commit, fileInfo.File.Path, 0, 0, w)
+			})
+		}
+		return p.makeFile(newPath, func(w io.Writer) error { return nil })
+	}); err != nil {
+		return err
+	}
+	return nil
 }
 
 // PullDiff is like Pull except that it materializes a Diff of the content
