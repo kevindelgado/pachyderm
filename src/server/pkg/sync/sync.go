@@ -169,56 +169,118 @@ func collectStatsForNewPath(client *pachclient.APIClient, root, file string, fil
 // mutually exclusive with pipes.
 // tree is a hashtree to mirror the pulled content into (it may be left nil)
 // treeRoot is the root the data is mirrored to within tree
+// func (p *Puller) Pull(client *pachclient.APIClient, root string, repo, commit, file string,
+// 	pipes bool, emptyFiles bool, concurrency int, statsTree *hashtree.Ordered, statsRoot string) error {
+// 	// if err := os.MkdirAll(root, 0700); err != nil {
+// 	// 	return err
+// 	// }
+// 	limiter := limit.New(concurrency)
+// 	var eg errgroup.Group
+// 	if !pipes && !emptyFiles {
+// 		eg.Go(func() (retErr error) {
+// 			limiter.Acquire()
+// 			defer limiter.Release()
+// 			return client.GetFiles(repo, commit, file, 0, 0, func(fi *pfs.FileInfo, r io.Reader) error {
+// 				newPath, err := collectStatsForNewPath(client, root, file, fi, statsTree, statsRoot)
+// 				if err != nil {
+// 					return err
+// 				}
+// 				// if fi.FileType == pfs.FileType_DIR {
+// 				// 	return os.MkdirAll(newPath, 0700)
+// 				// }
+// 				err = p.makeFile(newPath, func(w io.Writer) error {
+// 					_, err := io.Copy(w, r)
+// 					return err
+// 				})
+// 				return err
+// 			})
+// 		})
+// 		return eg.Wait()
+// 	}
+// 	if err := client.Walk(repo, commit, file, func(fileInfo *pfs.FileInfo) error {
+// 		newPath, err := collectStatsForNewPath(client, root, file, fileInfo, statsTree, statsRoot)
+// 		if err != nil {
+// 			return nil
+// 		}
+// 		if fileInfo.FileType == pfs.FileType_DIR {
+// 			return os.MkdirAll(newPath, 0700)
+// 		}
+// 		if pipes {
+// 			return p.makePipe(newPath, func(w io.Writer) error {
+// 				return client.GetFile(repo, commit, fileInfo.File.Path, 0, 0, w)
+// 			})
+// 		}
+// 		if emptyFiles {
+// 			return p.makeFile(newPath, func(w io.Writer) error { return nil })
+// 		}
+// 		return nil
+// 	}); err != nil {
+// 		return err
+// 	}
+
+// 	return nil
+// }
+
+////////// OLD PULL ////////////
+// Pull clones an entire repo at a certain commit.
+// root is the local path you want to clone to.
+// fileInfo is the file/dir we are puuling.
+// pipes causes the function to create named pipes in place of files, thus
+// lazily downloading the data as it's needed.
+// emptyFiles causes the function to create empty files with no content, it's
+// mutually exclusive with pipes.
+// tree is a hashtree to mirror the pulled content into (it may be left nil)
+// treeRoot is the root the data is mirrored to within tree
 func (p *Puller) Pull(client *pachclient.APIClient, root string, repo, commit, file string,
 	pipes bool, emptyFiles bool, concurrency int, statsTree *hashtree.Ordered, statsRoot string) error {
-	// if err := os.MkdirAll(root, 0700); err != nil {
-	// 	return err
-	// }
 	limiter := limit.New(concurrency)
 	var eg errgroup.Group
-	if !pipes && !emptyFiles {
-		eg.Go(func() (retErr error) {
-			limiter.Acquire()
-			defer limiter.Release()
-			return client.GetFiles(repo, commit, file, 0, 0, func(fi *pfs.FileInfo, r io.Reader) error {
-				newPath, err := collectStatsForNewPath(client, root, file, fi, statsTree, statsRoot)
-				if err != nil {
-					return err
-				}
-				// if fi.FileType == pfs.FileType_DIR {
-				// 	return os.MkdirAll(newPath, 0700)
-				// }
-				err = p.makeFile(newPath, func(w io.Writer) error {
-					_, err := io.Copy(w, r)
-					return err
-				})
-				return err
-			})
-		})
-		return eg.Wait()
-	}
 	if err := client.Walk(repo, commit, file, func(fileInfo *pfs.FileInfo) error {
-		newPath, err := collectStatsForNewPath(client, root, file, fileInfo, statsTree, statsRoot)
+		basepath, err := filepath.Rel(file, fileInfo.File.Path)
 		if err != nil {
-			return nil
+			return err
 		}
+		if statsTree != nil {
+			statsPath := filepath.Join(statsRoot, basepath)
+			if fileInfo.FileType == pfs.FileType_DIR {
+				statsTree.PutDir(statsPath)
+			} else {
+				var blockRefs []*pfs.BlockRef
+				for _, object := range fileInfo.Objects {
+					objectInfo, err := client.InspectObject(object.Hash)
+					if err != nil {
+						return err
+					}
+					blockRefs = append(blockRefs, objectInfo.BlockRef)
+				}
+				blockRefs = append(blockRefs, fileInfo.BlockRefs...)
+				statsTree.PutFile(statsPath, fileInfo.Hash, int64(fileInfo.SizeBytes), &hashtree.FileNodeProto{BlockRefs: blockRefs})
+			}
+		}
+		path := filepath.Join(root, basepath)
 		if fileInfo.FileType == pfs.FileType_DIR {
-			return os.MkdirAll(newPath, 0700)
+			return os.MkdirAll(path, 0700)
 		}
 		if pipes {
-			return p.makePipe(newPath, func(w io.Writer) error {
+			return p.makePipe(path, func(w io.Writer) error {
 				return client.GetFile(repo, commit, fileInfo.File.Path, 0, 0, w)
 			})
 		}
 		if emptyFiles {
-			return p.makeFile(newPath, func(w io.Writer) error { return nil })
+			return p.makeFile(path, func(w io.Writer) error { return nil })
 		}
+		eg.Go(func() (retErr error) {
+			limiter.Acquire()
+			defer limiter.Release()
+			return p.makeFile(path, func(w io.Writer) error {
+				return client.GetFile(repo, commit, fileInfo.File.Path, 0, 0, w)
+			})
+		})
 		return nil
 	}); err != nil {
 		return err
 	}
-
-	return nil
+	return eg.Wait()
 }
 
 // PullDiff is like Pull except that it materializes a Diff of the content
