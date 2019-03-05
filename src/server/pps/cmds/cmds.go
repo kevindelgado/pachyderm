@@ -493,7 +493,7 @@ All jobs created by a pipeline will create commits in the pipeline's repo.
 			if raw {
 				return marshaller.Marshal(os.Stdout, pipelineInfo)
 			}
-			pi := &pretty.PrintablePiplineInfo{
+			pi := &pretty.PrintablePipelineInfo{
 				PipelineInfo: pipelineInfo,
 				Long:         long,
 			}

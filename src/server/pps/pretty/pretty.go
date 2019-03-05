@@ -109,7 +109,8 @@ func PrintWorkerStatus(w io.Writer, workerStatus *ppsclient.WorkerStatus, long b
 	fmt.Fprintf(w, "%d\t\n", workerStatus.QueueSize)
 }
 
-// PrintableJobInfo todo finish this comment
+// PrintableJobInfo is a wrapper around JobInfo containing any formatting options
+// used within the template to conditionally print information.
 type PrintableJobInfo struct {
 	*ppsclient.JobInfo
 	Long bool
@@ -169,19 +170,19 @@ Egress: {{.Egress.URL}} {{end}}
 	return nil
 }
 
-type PrintablePiplineInfo struct {
+// PrintablePipelineInfo is a wrapper around PipelinInfo containing any formatting options
+// used within the template to conditionally print information.
+type PrintablePipelineInfo struct {
 	*ppsclient.PipelineInfo
 	Long bool
 }
 
 // PrintDetailedPipelineInfo pretty-prints detailed pipeline info.
-func PrintDetailedPipelineInfo(pipelineInfo PrintablePiplineInfo) error {
+func PrintDetailedPipelineInfo(pipelineInfo PrintablePipelineInfo) error {
 	template, err := template.New("PipelineInfo").Funcs(funcMap).Parse(
 		`Name: {{.Pipeline.Name}}{{if .Description}}
-Description: {{.Description}}{{end}}
-{{if .Long }}
-Created: {{.CreatedAt}}
-{{ else }}
+Description: {{.Description}}{{end}}{{if .Long }}
+Created: {{.CreatedAt}}{{ else }}
 Created: {{prettyAgo .CreatedAt}} {{end}}
 State: {{pipelineState .State}}
 Stopped: {{ .Stopped }}
