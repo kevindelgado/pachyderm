@@ -117,12 +117,12 @@ type PrintableJobInfo struct {
 }
 
 // PrintDetailedJobInfo pretty-prints detailed job info.
-func PrintDetailedJobInfo(jobInfo PrintableJobInfo) error {
+func PrintDetailedJobInfo(jobInfo *PrintableJobInfo) error {
 	template, err := template.New("JobInfo").Funcs(funcMap).Parse(
 		`ID: {{.Job.ID}} {{if .Pipeline}}
 Pipeline: {{.Pipeline.Name}} {{end}} {{if .ParentJob}}
-Parent: {{.ParentJob.ID}} {{end}}{{if .Long }}
-Started: {{.Started}}{{ else }}
+Parent: {{.ParentJob.ID}} {{end}}{{if .Long}}
+Started: {{.Started}}{{else}}
 Started: {{prettyAgo .Started}} {{end}}{{if .Finished}}
 Duration: {{prettyTimeDifference .Started .Finished}} {{end}}
 State: {{jobState .State}}
@@ -178,7 +178,7 @@ type PrintablePipelineInfo struct {
 }
 
 // PrintDetailedPipelineInfo pretty-prints detailed pipeline info.
-func PrintDetailedPipelineInfo(pipelineInfo PrintablePipelineInfo) error {
+func PrintDetailedPipelineInfo(pipelineInfo *PrintablePipelineInfo) error {
 	template, err := template.New("PipelineInfo").Funcs(funcMap).Parse(
 		`Name: {{.Pipeline.Name}}{{if .Description}}
 Description: {{.Description}}{{end}}{{if .Long }}

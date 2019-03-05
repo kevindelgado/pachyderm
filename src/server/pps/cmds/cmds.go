@@ -98,7 +98,7 @@ The increase the throughput of a job increase the Shard paremeter.
 				JobInfo: jobInfo,
 				Long:    long,
 			}
-			return pretty.PrintDetailedJobInfo(*ji)
+			return pretty.PrintDetailedJobInfo(ji)
 		}),
 	}
 	inspectJob.Flags().BoolVarP(&block, "block", "b", false, "block until the job has either succeeded or failed")
@@ -497,7 +497,7 @@ All jobs created by a pipeline will create commits in the pipeline's repo.
 				PipelineInfo: pipelineInfo,
 				Long:         long,
 			}
-			return pretty.PrintDetailedPipelineInfo(*pi)
+			return pretty.PrintDetailedPipelineInfo(pi)
 		}),
 	}
 	rawFlag(inspectPipeline)

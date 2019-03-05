@@ -328,7 +328,7 @@ $ pachctl start-commit test -p XXX
 				CommitInfo: commitInfo,
 				Long:       long,
 			}
-			return pretty.PrintDetailedCommitInfo(*ci)
+			return pretty.PrintDetailedCommitInfo(ci)
 		}),
 	}
 	rawFlag(inspectCommit)

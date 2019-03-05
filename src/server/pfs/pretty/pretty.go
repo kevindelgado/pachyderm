@@ -54,7 +54,7 @@ type PrintableRepoInfo struct {
 }
 
 // PrintDetailedRepoInfo pretty-prints detailed repo info.
-func PrintDetailedRepoInfo(repoInfo *PrintableRepoInfo) error {
+func PrintDetailedRepoInfo(repoInfo PrintableRepoInfo) error {
 	template, err := template.New("RepoInfo").Funcs(funcMap).Parse(
 		`Name: {{.Repo.Name}}{{if .Description}}
 Description: {{.Description}}{{end}}{{if .Long}}
@@ -123,14 +123,15 @@ type PrintableCommitInfo struct {
 }
 
 // PrintDetailedCommitInfo pretty-prints detailed commit info.
-func PrintDetailedCommitInfo(commitInfo PrintableCommitInfo) error {
+func PrintDetailedCommitInfo(commitInfo *PrintableCommitInfo) error {
 	template, err := template.New("CommitInfo").Funcs(funcMap).Parse(
 		`Commit: {{.Commit.Repo.Name}}/{{.Commit.ID}}{{if .Description}}
 Description: {{.Description}}{{end}}{{if .ParentCommit}}
 Parent: {{.ParentCommit.ID}}{{end}}{{if .Long}}
 Started: {{.Started}}{{else}}
-Started: {{prettyAgo .Started}}{{end}}{{if .Finished}}
-Finished: {{prettyAgo .Finished}} {{end}}
+Started: {{prettyAgo .Started}}{{end}}{{if .Finished}}{{if .Long}}
+Finished: {{.Finished}}{{else}}
+Finished: {{prettyAgo .Finished}}{{end}}{{end}}
 Size: {{prettySize .SizeBytes}}{{if .Provenance}}
 Provenance: {{range .Provenance}} {{.Repo.Name}}/{{.ID}} {{end}} {{end}}
 `)
