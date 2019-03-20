@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: get-files-loadtest-supervisor
+  labels:
+    name: get-files-loadtest-supervisor
+spec:
+  containers:
+  - name: supervisor
+    image: kevindelgado/get-files-loadtest-supervisor:latest
+    command:
+        - /supervisor
+        - --num-files=100
+    imagePullPolicy: Always
+  restartPolicy: Never
+  tolerations:
+        - key: "dedicated"
+          operator: "Equal"
+          value: "loadtest"
+          effect: "NoSchedule"
